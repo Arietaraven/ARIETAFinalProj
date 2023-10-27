@@ -1,0 +1,19 @@
+<h1>{{post?.title}}</h1>
+<img src="{{post?.imgPath}}"/>
+<p>{{post?.description}}</p>
+
+<p>{{post?.author}}</p>
+<P>{{post?.dateCreated}}</P>
+<p><button   (click)="onClick()" style=" text-decoration: none; font-size:24px; color: red;" class="fa fa-heart-o">&nbsp;
+    {{post?.numberOfLikes}}</button>
+</p>
+<div class="comment-section">
+    <input type="text" [(ngModel)]="comment" placeholder="add a comment">
+    <button (click)="addComment()">Comments</button>
+</div><br>
+<div *ngFor="let comment of post?.comments">
+    <p>{{ comment }}</p>
+</div>
+
+<button class="btn btn-primary" (click)="onEdit()">Edit</button> | 
+<button class="btn btn-danger" (click)="delete()">Delete</button>

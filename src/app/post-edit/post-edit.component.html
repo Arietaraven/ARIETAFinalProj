@@ -1,0 +1,31 @@
+<h3 class="font-weight-bold" *ngIf="editMode==false"> Create Post</h3>
+<h3 class="font-weight-bold" *ngIf="editMode==true"> Edit Post</h3>
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="form-row">
+      <div class="form-group col-md-6"> 
+        <label for="inputEmail4">title</label>
+        <input type="email" class="form-control" id="inputEmail4" placeholder="title" formControlName="title">
+      </div>
+      <div class="form-group col-md-6">
+        <label for="inputPassword4">Image Path</label>
+        <input type="text" class="form-control" 
+        
+         placeholder="imgPath" 
+         formControlName="imgPath"
+         />
+         <img src="{{ form.value.imgPath}}">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group col-md-6">
+        <label for="inputCity">description</label>
+        <input type="text" class="form-control" id="inputCity" formControlName="description"> 
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="form-check">
+      </div>
+    </div>
+    <button type="submit" class="btn btn-primary" [disabled]="form.invalid">Save</button> |    
+    <button type="reset" class="btn btn-danger">Clear</button>
+  </form>

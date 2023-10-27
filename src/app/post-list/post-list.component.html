@@ -1,0 +1,4 @@
+<!-- <app-post [post]="listofposts[0]"></app-post> -->
+<ng-container *ngFor="let post of listofposts; let i = index">
+    <app-post [post]="post" [index]='i'></app-post>
+  </ng-container>
