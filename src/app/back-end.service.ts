@@ -20,19 +20,19 @@ export class BackEndService {
       console.log(res);
     })
   }
-  // fetchData(){
-  //   return this.http.get<Post[]>('https://crud-b-8f2ce-default-rtdb.firebaseio.com/post.json')
-  //   .pipe(tap((newlistofpost: Post[])=>{
-  //     console.log(newlistofpost)
-  //     this.postService.setPost(newlistofpost);
-  //   })
-  //   ).subscribe();
-  // }
   fetchData(){
     return this.http.get<Post[]>('https://crud-b-8f2ce-default-rtdb.firebaseio.com/post.json')
     .pipe(tap((newlistofpost: Post[])=>{
       console.log(newlistofpost)
       this.postService.setPost(newlistofpost);
-    }));
+    })
+    ).subscribe();
   }
+  // fetchData(){
+  //   return this.http.get<Post[]>('https://crud-b-8f2ce-default-rtdb.firebaseio.com/post.json')
+  //   .pipe(tap((newlistofpost: Post[])=>{
+  //     console.log(newlistofpost)
+  //     this.postService.setPost(newlistofpost);
+  //   }));
+  // }
 }
