@@ -17,14 +17,13 @@ constructor(
 ){}
 
 ngOnInit(): void{
-  // this.backEndService.fetchData().subscribe((posts: Post[]) => {
-  //   this.listofposts = posts;
-  //   this.postService.setPost(posts); // assuming setPost method exists in your PostService
-  // });
-
   this.listofposts = this.postService.getPost();
   this.postService.listChangeEvent.subscribe((post:Post[]) =>{
     this.listofposts = post;
   })
 }
 }
+  // this.backEndService.fetchData().subscribe((posts: Post[]) => {
+  //   this.listofposts = posts;
+  //   this.postService.setPost(posts); // assuming setPost method exists in your PostService
+  // });

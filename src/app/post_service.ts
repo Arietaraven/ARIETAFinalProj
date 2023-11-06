@@ -12,6 +12,16 @@ export class PostService{
     // "John Raven Arieta",
     // new Date(),6,[],
     // ),
+    // new Post("tech crunch", "https://firstsiteguide.com/wp-content/uploads/2017/06/best-blog-examples.png", 
+    // "We’ve created this article with a simple mission, to share with new bloggers some examples of successful and popular blogs on the web. Hopefully, these niche blog examples will motivate you to start your own blog The best blogs share,",
+    // "John Raven Arieta",
+    // new Date(),6,[],
+    // ),
+    // new Post("tech crunch", "https://firstsiteguide.com/wp-content/uploads/2017/06/best-blog-examples.png", 
+    // "We’ve created this article with a simple mission, to share with new bloggers some examples of successful and popular blogs on the web. Hopefully, these niche blog examples will motivate you to start your own blog The best blogs share,",
+    // "John Raven Arieta",
+    // new Date(),6,[],
+    // ),
     
   ]
   

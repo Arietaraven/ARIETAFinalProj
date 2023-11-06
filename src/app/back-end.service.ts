@@ -21,7 +21,7 @@ export class BackEndService {
     })
   }
   fetchData(){
-    return this.http.get<Post[]>('https://crud-b-8f2ce-default-rtdb.firebaseio.com/post.json')
+     this.http.get<Post[]>('https://crud-b-8f2ce-default-rtdb.firebaseio.com/post.json')
     .pipe(tap((newlistofpost: Post[])=>{
       console.log(newlistofpost)
       this.postService.setPost(newlistofpost);
