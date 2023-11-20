@@ -14,7 +14,7 @@ export class HeaderComponent {
   }
 
   onsave() {
-    this.backEndService.saveDate();
+    this.backEndService.saveData();
   }
   onfetch(){
     this.backEndService.fetchData();

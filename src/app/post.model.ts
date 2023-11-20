@@ -6,7 +6,13 @@ export class Post{
         public author: string,
         public dateCreated: Date,
         public numberOfLikes: number,
-        public comments: string[] = []
+        public comments: Comment[] = []
         ){
         }
 }
+
+export interface Comment {
+    text: string;
+    commentReplies: Comment[];
+}
+  
