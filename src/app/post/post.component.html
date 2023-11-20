@@ -11,9 +11,33 @@
 <button class="btn btn-danger" (click)="delete()">Delete</button>
 </p>
 
+
 <div class="comment-section">
     <input type="text" [(ngModel)]="comment" placeholder="add a comment">
-    <button (click)="addComment(index, comment, undefined)">Add Comment</button>
+    <button class="btn btn-primary" (click)="addComment(index, comment)">Add Comment</button>
+  </div><br>
+  
+  <!-- <div *ngFor="let comment of post?.comments; let commentIndex = index">
+    <p>{{ comment.text }}</p> -->
+    <div *ngFor="let comment of post?.comments; let commentIndex = index">
+        <p>{{ comment.text }}</p>
+    <div *ngFor="let reply of comment.commentReplies">
+      <p>{{ reply.text }}</p> <!-- Access the 'text' property of the Comment object -->
+    </div>
+    <!-- Add a button to reply to the comment -->
+    <button class="btn btn-danger" (click)="deleteComment(commentIndex)">Delete</button> |
+    <button class="btn btn-primary" (click)="setParentCommentIndex(commentIndex)">Reply</button>
+    <div *ngIf="replyingTo === commentIndex">
+      <input type="text" [(ngModel)]="replyComment" placeholder="add a reply">
+      <button class="btn btn-primary" (click)="addComment(index, replyComment, commentIndex)">Submit Reply</button>
+    </div>
+  </div>
+  
+
+
+<!-- <div class="comment-section">
+    <input type="text" [(ngModel)]="comment" placeholder="add a comment">
+    <button (click)="addComment(index, comment)">Add Comment</button>
   </div><br>
   
   <div *ngFor="let comment of post?.comments; let commentIndex = index">
@@ -22,12 +46,12 @@
       <p>{{ reply }}</p>
     </div>
     <!-- Add a button to reply to the comment -->
-    <button (click)="setParentCommentIndex(commentIndex)">Reply</button>
+    <!-- <button (click)="setParentCommentIndex(commentIndex)">Reply</button>
     <div *ngIf="replyingTo === commentIndex">
         <input type="text" [(ngModel)]="replyComment" placeholder="add a reply">
-      <button (click)="addComment(index, comment.text, commentIndex)">Submit Reply</button>
+      <button (click)="addComment(index, comment.text)">Submit Reply</button>
     </div>
-  </div>
+  </div> -->
   
   
 <!-- <div class="comment-section">

@@ -1,5 +1,5 @@
 import { EventEmitter, Injectable } from "@angular/core";
-import { Post } from "./post.model";
+import { Post, Comment } from "./post.model";
 import {Subject, Observable, retry } from "rxjs";
 import { HttpClient } from "@angular/common/http";
 
@@ -10,6 +10,7 @@ export class PostService{
 
   private postsUpdated = new Subject<Post[]>();
     private postsCache: Post[] = [];
+  posts: any;
     
 
   constructor(private http: HttpClient) {}
@@ -78,25 +79,95 @@ export class PostService{
 // }
 
 
-addComment(index: number, comment: string, parentCommentIndex?: number) {
+
+deleteComment(postIndex: number, commentIndex: number): void {
+  if (this.listofposts && this.listofposts[postIndex] && this.listofposts[postIndex].comments) {
+  this.modifyPosts(() => this.listofposts[postIndex].comments.splice(commentIndex, 1));
+} else {
+  console.error('Invalid postIndex or commentIndex');
+}
+}
+
+// deleteComment(postIndex: number, commentIndex: number) {
+//   if (this.listofposts && this.listofposts[postIndex] && this.listofposts[postIndex].comments) {
+//     this.listofposts[postIndex].comments.splice(commentIndex, 1);
+//   } else {
+//     console.error('Invalid postIndex or commentIndex');
+//   }
+// }
+
+// post.service.ts
+addComment(index: number, comment: Comment, parentCommentIndex?: number) {
   if (this.listofposts[index] && this.listofposts[index].comments) {
     if (parentCommentIndex !== undefined) {
       // Adding a reply to a specific comment
-      this.listofposts[index].comments[parentCommentIndex].commentReplies.push({
-        text: comment,
-        commentReplies: []
-      });
+      if (!this.listofposts[index].comments[parentCommentIndex].commentReplies) {
+        // Initialize commentReplies as an empty array if it's undefined
+        this.listofposts[index].comments[parentCommentIndex].commentReplies = [];
+      }
+      this.listofposts[index].comments[parentCommentIndex].commentReplies.push(comment);
     } else {
       // Adding a top-level comment
-      this.listofposts[index].comments.push({
-        text: comment,
-        commentReplies: []
-      });
+      this.listofposts[index].comments.push(comment);
     }
     this.listChangeEvent.emit(this.listofposts);
     this.saveData();
   }
 }
+
+
+
+
+
+
+
+
+// addComment(index: number, comment: string, parentCommentIndex?: number) {
+//   if (this.listofposts[index] && this.listofposts[index].comments) {
+//     if (parentCommentIndex !== undefined) {
+//       // Adding a reply to a specific comment
+//       if (!this.listofposts[index].comments[parentCommentIndex].commentReplies) {
+//         // Initialize commentReplies as an empty array if it's undefined
+//         this.listofposts[index].comments[parentCommentIndex].commentReplies = [];
+//       }
+//       this.listofposts[index].comments[parentCommentIndex].commentReplies.push({
+//         text: comment,
+//         commentReplies: []
+//       });
+//     } else {
+//       // Adding a top-level comment
+//       this.listofposts[index].comments.push({
+//         text: comment,
+//         commentReplies: []
+//       });
+//     }
+//     this.listChangeEvent.emit(this.listofposts);
+//     this.saveData();
+//   }
+// }
+
+
+
+
+// addComment(index: number, comment: string, parentCommentIndex?: number) {
+//   if (this.listofposts[index] && this.listofposts[index].comments) {
+//     if (parentCommentIndex !== undefined) {
+//       // Adding a reply to a specific comment
+//       this.listofposts[index].comments[parentCommentIndex].commentReplies.push({
+//         text: comment,
+//         commentReplies: []
+//       });
+//     } else {
+//       // Adding a top-level comment
+//       this.listofposts[index].comments.push({
+//         text: comment,
+//         commentReplies: []
+//       });
+//     }
+//     this.listChangeEvent.emit(this.listofposts);
+//     this.saveData();
+//   }
+// }
 
 
 

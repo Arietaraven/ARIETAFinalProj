@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Post } from '../post.model';
+import { Post, Comment } from '../post.model';
 import { PostService } from '../post_service';
 import { Router } from '@angular/router';
 @Component({
@@ -8,13 +8,15 @@ import { Router } from '@angular/router';
   styleUrls: ['./post.component.css']
 })
 export class PostComponent implements OnInit{
-
+  comments: { text: string, commentReplies: { text: string, likes: number }[] }[] = [];
   commentIndex: number= 0;
   memberName = "lan"
+  // comments: {commentReplies: any; text: string }[] = [];
   comment: string = '';
   parentCommentIndex?: number;
   replyingTo: any;
   replyComment: string;
+
 
 
 
@@ -24,7 +26,7 @@ export class PostComponent implements OnInit{
   }
     @Input() index: number = 0;
     @Input() post?: Post;
-    comments: string = '';
+
 
    
   ngOnInit(): void {
@@ -39,25 +41,51 @@ export class PostComponent implements OnInit{
   onClick() {
     this.postService.LikePost(this.index);
   }
+  
+  deleteComment(commentIndex: number) {
+    this.postService.deleteComment(this.index, commentIndex);
+  }
+
+  likeReply(commentIndex: number, replyIndex: number) {
+    this.comments[commentIndex].commentReplies[replyIndex].likes++;
+}
+
+  setParentCommentIndex(commentIndex: number) {
+    this.replyingTo = commentIndex;
+  }
+
+
+  addComment(index: number, comment: string, parentCommentIndex?: number) {
+    if (comment && this.replyingTo !== null) {
+      const newComment: Comment = { text: comment, commentReplies: [] };
+      this.postService.addComment(index, newComment, parentCommentIndex);
+      this.comment = ''; // Reset the comment input
+      this.replyingTo = null; // Reset replyingTo after replying
+    } else if (comment) {
+      const newComment: Comment = { text: comment, commentReplies: [] };
+      this.postService.addComment(index, newComment);
+      this.comment = ''; // Reset the comment input
+    }
+  }
+  
+
+
+
+
 
 // post.component.ts
-addComment(index: number, comment: string, commentIndex: number | undefined) {
-  if (comment && this.parentCommentIndex !== undefined) {
-    this.postService.addComment(index, comment, this.parentCommentIndex);
-    this.comment = ''; // Reset the comment input
-    this.parentCommentIndex = undefined; // Reset parentCommentIndex after replying
-  } else if (comment) {
-    this.postService.addComment(index, comment, commentIndex);
-    this.comment = ''; // Reset the comment input
-  }
-}
-
-
-
-
-setParentCommentIndex(commentIndex: number) {
-  this.parentCommentIndex = commentIndex;
-}
+// addComment(index: number, comment: string) {
+//   if (comment && this.replyingTo !== null) {
+//     const newComment: Comment = { text: comment, commentReplies: [] };
+//     this.postService.addComment(index, newComment, this.replyingTo);
+//     this.comment = ''; // Reset the comment input
+//     this.replyingTo = null; // Reset replyingTo after replying
+//   } else if (comment) {
+//     const newComment: Comment = { text: comment, commentReplies: [] };
+//     this.postService.addComment(index, newComment);
+//     this.comment = ''; // Reset the comment input
+//   }
+// }
 
   }
   
