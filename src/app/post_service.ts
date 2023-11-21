@@ -39,9 +39,7 @@ export class PostService{
     return this.listofposts;
 
   }
-  // deletebutton(index: number) {
-  //   this.listofposts.splice(index, 1)
-  // }
+
   deletebutton(index: number): void {
     this.modifyPosts(() => this.listofposts.splice(index, 1));
 }
@@ -58,27 +56,12 @@ export class PostService{
   getSpecPost(index: number){
     return this.listofposts[index];
   } 
-  // LikePost(index: number){
-  //   this.listofposts[index].numberOfLikes ++;
-  // }  
+
   LikePost(index: number){
     this.listofposts[index].numberOfLikes++;
     this.listChangeEvent.emit(this.listofposts);
     this.saveData();
 }
-  // addComment(index: number, comment: string) {
-  //   this.listofposts[index].comments.push(comment);
-  // }
-
-//   addComment(index: number, comment: string){
-//     if (this.listofposts[index] && this.listofposts[index].comments) {
-//         this.listofposts[index].comments.push(comment);
-//         this.listChangeEvent.emit(this.listofposts);
-//         this.saveData();
-//     }
-// }
-
-
 
 deleteComment(postIndex: number, commentIndex: number): void {
   if (this.listofposts && this.listofposts[postIndex] && this.listofposts[postIndex].comments) {
@@ -88,91 +71,72 @@ deleteComment(postIndex: number, commentIndex: number): void {
 }
 }
 
-// deleteComment(postIndex: number, commentIndex: number) {
-//   if (this.listofposts && this.listofposts[postIndex] && this.listofposts[postIndex].comments) {
-//     this.listofposts[postIndex].comments.splice(commentIndex, 1);
-//   } else {
-//     console.error('Invalid postIndex or commentIndex');
+// deleteReply(postIndex: number, commentIndex: number, replyIndex: number) {
+//   if (
+//     this.posts?.comments &&
+//     this.posts.comments[commentIndex] &&
+//     this.posts.comments[commentIndex].commentReplies
+//   ) {
+//     this.posts.comments[commentIndex].commentReplies.splice(replyIndex, 1);
+//     // Call a service method here to update the data on the server, if necessary
 //   }
 // }
 
-// post.service.ts
+// deleteReply(postIndex: number, commentIndex: number, replyIndex: number) {
+//   if (
+//     this.listofposts &&
+//     this.listofposts[postIndex] &&
+//     this.listofposts[postIndex].comments &&
+//     this.listofposts[postIndex].comments[commentIndex] &&
+//     this.listofposts[postIndex].comments[commentIndex].commentReplies
+//   ) {
+//     this.listofposts[postIndex].comments[commentIndex].commentReplies.splice(replyIndex, 1);
+//     this.listChangeEvent.emit(this.listofposts);
+//     this.saveData();
+//   }
+// }
+
 addComment(index: number, comment: Comment, parentCommentIndex?: number) {
   if (this.listofposts[index] && this.listofposts[index].comments) {
     if (parentCommentIndex !== undefined) {
-      // Adding a reply to a specific comment
       if (!this.listofposts[index].comments[parentCommentIndex].commentReplies) {
-        // Initialize commentReplies as an empty array if it's undefined
         this.listofposts[index].comments[parentCommentIndex].commentReplies = [];
       }
       this.listofposts[index].comments[parentCommentIndex].commentReplies.push(comment);
     } else {
-      // Adding a top-level comment
       this.listofposts[index].comments.push(comment);
     }
     this.listChangeEvent.emit(this.listofposts);
     this.saveData();
   }
 }
+likeComment(postIndex: number, commentIndex: number): void {
+  if (this.listofposts && this.listofposts[postIndex] && this.listofposts[postIndex].comments) {
+    const comment = this.listofposts[postIndex].comments[commentIndex];
+    if (comment) {
+      comment.likes = (comment.likes || 0) + 1;
+      this.listChangeEvent.emit(this.listofposts);
+      this.saveData();
+    }
+  }
+}
 
-
-
-
-
-
-
-
-// addComment(index: number, comment: string, parentCommentIndex?: number) {
-//   if (this.listofposts[index] && this.listofposts[index].comments) {
-//     if (parentCommentIndex !== undefined) {
-//       // Adding a reply to a specific comment
-//       if (!this.listofposts[index].comments[parentCommentIndex].commentReplies) {
-//         // Initialize commentReplies as an empty array if it's undefined
-//         this.listofposts[index].comments[parentCommentIndex].commentReplies = [];
-//       }
-//       this.listofposts[index].comments[parentCommentIndex].commentReplies.push({
-//         text: comment,
-//         commentReplies: []
-//       });
-//     } else {
-//       // Adding a top-level comment
-//       this.listofposts[index].comments.push({
-//         text: comment,
-//         commentReplies: []
-//       });
-//     }
-//     this.listChangeEvent.emit(this.listofposts);
-//     this.saveData();
-//   }
-// }
-
-
-
-
-// addComment(index: number, comment: string, parentCommentIndex?: number) {
-//   if (this.listofposts[index] && this.listofposts[index].comments) {
-//     if (parentCommentIndex !== undefined) {
-//       // Adding a reply to a specific comment
-//       this.listofposts[index].comments[parentCommentIndex].commentReplies.push({
-//         text: comment,
-//         commentReplies: []
-//       });
-//     } else {
-//       // Adding a top-level comment
-//       this.listofposts[index].comments.push({
-//         text: comment,
-//         commentReplies: []
-//       });
-//     }
-//     this.listChangeEvent.emit(this.listofposts);
-//     this.saveData();
-//   }
-// }
-
-
-
-
-
+likeReply(postIndex: number, commentIndex: number, replyIndex: number): void {
+  if (
+    this.listofposts &&
+    this.listofposts[postIndex] &&
+    this.listofposts[postIndex].comments &&
+    this.listofposts[postIndex].comments[commentIndex] &&
+    this.listofposts[postIndex].comments[commentIndex].commentReplies
+  ) {
+    const reply = this.listofposts[postIndex].comments[commentIndex].commentReplies[replyIndex];
+    if (reply) {
+      reply.likes = (reply.likes || 0) + 1;
+      this.listChangeEvent.emit(this.listofposts);
+      this.saveData();
+    }
+  }
+}
   setPost(newlistofpost:Post[]) {
     this.listofposts = newlistofpost;
     this.listChangeEvent.emit(newlistofpost);

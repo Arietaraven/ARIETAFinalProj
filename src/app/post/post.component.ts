@@ -11,11 +11,12 @@ export class PostComponent implements OnInit{
   comments: { text: string, commentReplies: { text: string, likes: number }[] }[] = [];
   commentIndex: number= 0;
   memberName = "lan"
-  // comments: {commentReplies: any; text: string }[] = [];
   comment: string = '';
   parentCommentIndex?: number;
   replyingTo: any;
   replyComment: string;
+  postIndex!: number;
+  replyIndex!: number;
 
 
 
@@ -46,53 +47,37 @@ export class PostComponent implements OnInit{
     this.postService.deleteComment(this.index, commentIndex);
   }
 
-  likeReply(commentIndex: number, replyIndex: number) {
-    this.comments[commentIndex].commentReplies[replyIndex].likes++;
+  // deleteReply(index: number,commentIndex: number, i: number, replyIndex: number){
+  //   this.postService.deleteReply(this.index, commentIndex, replyIndex);
+  // }
+
+addComment(index: number, comment: string, parentCommentIndex?: number) {
+  if (comment && this.replyingTo !== null) {
+    const newComment: Comment = { text: comment, commentReplies: [], likes: 0  };
+    this.postService.addComment(index, newComment, parentCommentIndex);
+    this.comment = ''; // Reset the comment input
+    this.replyingTo = null; // Reset replyingTo after replying
+  } else if (comment) {
+    const newComment: Comment = { text: comment, commentReplies: [], likes: 0  };
+    this.postService.addComment(index, newComment);
+    this.comment = ''; // Reset the comment input
+  }
 }
 
-  setParentCommentIndex(commentIndex: number) {
-    this.replyingTo = commentIndex;
-  }
 
+setParentCommentIndex(commentIndex: number | undefined) {
+  this.replyingTo = commentIndex;
+}
 
-  addComment(index: number, comment: string, parentCommentIndex?: number) {
-    if (comment && this.replyingTo !== null) {
-      const newComment: Comment = { text: comment, commentReplies: [] };
-      this.postService.addComment(index, newComment, parentCommentIndex);
-      this.comment = ''; // Reset the comment input
-      this.replyingTo = null; // Reset replyingTo after replying
-    } else if (comment) {
-      const newComment: Comment = { text: comment, commentReplies: [] };
-      this.postService.addComment(index, newComment);
-      this.comment = ''; // Reset the comment input
+likeComment(postIndex: number, commentIndex: number): void {
+  this.postService.likeComment(postIndex, commentIndex);
+}
+
+  likeReply(postIndex: number, commentIndex: number, replyIndex: number): void {
+    const reply = this.post?.comments[commentIndex]?.commentReplies[replyIndex];
+    if (reply) {
+      this.postService.likeReply(postIndex, commentIndex, replyIndex);
     }
   }
-  
-
-
-
-
-
-// post.component.ts
-// addComment(index: number, comment: string) {
-//   if (comment && this.replyingTo !== null) {
-//     const newComment: Comment = { text: comment, commentReplies: [] };
-//     this.postService.addComment(index, newComment, this.replyingTo);
-//     this.comment = ''; // Reset the comment input
-//     this.replyingTo = null; // Reset replyingTo after replying
-//   } else if (comment) {
-//     const newComment: Comment = { text: comment, commentReplies: [] };
-//     this.postService.addComment(index, newComment);
-//     this.comment = ''; // Reset the comment input
-//   }
-// }
-
-  }
-  
-
-  // addComment() {
-  //   if (this.comment)
-  //   this.postService.addComment(this.index, this.comment);
-  //   this.comment = '';
-  // }
+}
 
