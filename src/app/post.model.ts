@@ -12,6 +12,7 @@ export class Post{
 }
 
 export interface Comment {
+    replies: Comment[];
     likes: number;
     text: string;
     commentReplies: Comment[];

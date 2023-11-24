@@ -1,4 +1,4 @@
-<h1>{{post?.title}}</h1>
+<!-- <h1>{{post?.title}}</h1>
 <img src="{{post?.imgPath}}"/>
 <p>{{post?.description}}</p>
 
@@ -16,83 +16,83 @@
     <input type="text" [(ngModel)]="comment" placeholder="add a comment">
     <button class="btn btn-primary" (click)="addComment(index, comment)">Add Comment</button>
   </div><br>
-  
-        <!-- <div *ngFor="let comment of post?.comments; let i = index">
-            <p *ngIf="comment?.text">{{ comment.text }}</p>
-            <button class="bi bi-heart btn btn-danger" (click)="likeComment(index, i)"></button> |
-            <span *ngIf="comment?.likes">{{ comment.likes }}</span>
-
-          <div *ngFor="let reply of comment.commentReplies; let replyIndex = index">
-            <p *ngIf="reply?.text">{{ reply.text }}</p>
-            <button class="bi bi-heart btn btn-danger" (click)="likeReply(index, commentIndex, replyIndex)"></button>
-            <span *ngIf="reply?.likes">{{ reply.likes }}</span>
-        </div>
-        
-
-    <button class="btn btn-danger" (click)="deleteComment(commentIndex)">Delete</button> |
-    <button class="btn btn-primary" (click)="setParentCommentIndex(commentIndex)">Reply</button>
-    <div *ngIf="replyingTo === commentIndex">
-      <input type="text" [(ngModel)]="replyComment" placeholder="add a reply">
-      <button class="btn btn-primary" (click)="addComment(index, replyComment, commentIndex)">Submit Reply</button>
-    </div>
-        </div> -->
-
-        <!-- <div *ngFor="let comment of post?.comments; let i = index">
-            <p *ngIf="comment?.text">{{ comment.text }}</p>
-            <button class="bi bi-heart btn btn-danger" (click)="likeComment(index, i)"></button> |
-            <span *ngIf="comment?.likes">{{ comment.likes }}</span>
-        
-            <div *ngFor="let reply of comment.commentReplies; let replyIndex = index">
-                <p *ngIf="reply?.text">{{ reply.text }}</p>
-                <button class="bi bi-heart btn btn-danger" (click)="likeReply(index, commentIndex, replyIndex)"></button>
-                <span *ngIf="reply?.likes">{{ reply.likes }}</span>
-            </div>
-        
-            <button class="btn btn-danger" (click)="deleteComment(commentIndex)">Delete</button> |
-            <button class="btn btn-primary" (click)="setParentCommentIndex(commentIndex)">Reply</button>
-        </div>
-        
-        <div *ngIf="replyingTo !== null">
-            <input type="text" [(ngModel)]="replyComment" placeholder="add a reply">
-            <button class="btn btn-primary" (click)="addComment(index, replyComment, replyingTo)">Submit Reply</button>
-        </div> -->
-
-        <!-- <div *ngFor="let comment of post?.comments; let i = index">
-            <p *ngIf="comment?.text">{{ comment.text }}</p>
-            <button class="bi bi-heart btn btn-danger" (click)="likeComment(index, i)"></button> |
-            <span *ngIf="comment?.likes">{{ comment.likes }}</span>
-        
-            <div *ngFor="let reply of comment.commentReplies; let replyIndex = index">
-                <p *ngIf="reply?.text">{{ reply.text }}</p>
-                <button class="bi bi-heart btn btn-danger" (click)="likeReply(index, commentIndex, replyIndex)"></button> |
-                <span *ngIf="reply?.likes">{{ reply.likes }}</span>
-            </div>
-        
-            <button class="btn btn-danger" (click)="deleteComment(commentIndex)">Delete</button> |
-            <button class="btn btn-primary" (click)="setParentCommentIndex(i)">Reply</button>
-        
-            <div *ngIf="replyingTo === i">
-                <input type="text" [(ngModel)]="replyComment" placeholder="add a reply">
-                <button class="btn btn-primary" (click)="addComment(index, replyComment, replyingTo)">Submit Reply</button>
-            </div>
-        </div> -->
 
 
         <div *ngFor="let comment of post?.comments; let i = index">
-            <p *ngIf="comment?.text">{{ comment.text }}</p>
-            <div *ngFor="let reply of comment.commentReplies; let replyIndex = index">
-                <p *ngIf="reply?.text">{{ reply.text }}</p>
-            </div>
-        
-            <div class="button-container">
-                <button class="bi bi-heart btn btn-danger" (click)="likeComment(index, i)"></button> |
-                <span *ngIf="comment?.likes">{{ comment.likes }}</span>
-                <button class="btn btn-danger" (click)="deleteComment(commentIndex)">Delete</button> |
-                <button class="btn btn-primary" (click)="setParentCommentIndex(i)">Reply</button>
-            </div>
-        
-            <div *ngIf="replyingTo === i">
-                <input type="text" [(ngModel)]="replyComment" placeholder="add a reply">
-                <button class="btn btn-primary" (click)="addComment(index, replyComment, replyingTo)">Submit Reply</button>
-            </div>
-        </div>
+    <p *ngIf="comment?.text">{{ comment.text }}</p>
+    <div *ngFor="let reply of comment.commentReplies; let replyIndex = index">
+        <p *ngIf="reply?.text">
+            {{ reply.text }}
+            <button class="bi bi-heart btn btn-danger" (click)="likeReply(index, i, replyIndex)"></button> |
+            <span *ngIf="reply?.likes">{{ reply.likes }}</span>
+            <button class="btn btn-danger" (click)="deleteReply(index, i, replyIndex)">Delete</button>
+        </p>
+    </div>
+
+    <div class="button-container">
+        <button class="bi bi-heart btn btn-danger" (click)="likeComment(index, i)"></button> |
+        <span *ngIf="comment?.likes">{{ comment.likes }}</span>
+        <button class="btn btn-danger" (click)="deleteComment(commentIndex)">Delete</button> |
+        <button class="btn btn-primary" (click)="setParentCommentIndex(i)">Reply</button>
+    </div>
+
+    <div *ngIf="replyingTo === i">
+        <input type="text" [(ngModel)]="replyComment" placeholder="add a reply">
+        <button class="btn btn-primary" (click)="addComment(index, replyComment, replyingTo)">Submit Reply</button>
+    </div>
+</div> -->
+
+
+<!-- Add this HTML structure within your Angular component template where you display the post -->
+<div class="facebook-post">
+    <h1>{{post?.title}}</h1>
+    <img src="{{post?.imgPath}}" alt="Post Image" style="width: 300px;"/>
+    <p>{{post?.description}}</p>
+  
+    <p class="post-details">
+      {{post?.author}} |
+      {{post?.dateCreated | date: 'medium'}}
+    </p>
+  
+    <div class="post-actions">
+      <button (click)="onClick()" class="bi bi-heart btn btn-danger">
+        {{post?.numberOfLikes}}
+      </button>
+      <button class="btn btn-primary" (click)="onEdit()">Edit</button>
+      <button class="btn btn-danger" (click)="delete()">Delete</button>
+    </div>
+  
+    <div class="comment-section">
+      <input type="text" [(ngModel)]="comment" placeholder="Add a comment" />
+      <button class="btn btn-primary" (click)="addComment(index, comment)">Add Comment</button>
+    </div>
+  
+    <div *ngFor="let comment of post?.comments; let i = index" class="comment-container">
+      <p *ngIf="comment?.text" class="comment-text">{{ comment.text }}</p>
+  
+      <!-- Replies -->
+      <div *ngFor="let reply of comment.commentReplies; let replyIndex = index" class="reply-container">
+        <p *ngIf="reply?.text" class="reply-text">
+          {{ reply.text }}<br>
+          <button class="bi bi-heart btn btn-danger" (click)="likeReply(index, i, replyIndex)"><span *ngIf="reply?.likes" class="likes-count">{{ reply.likes }} </span></button>
+          
+          <button class="btn btn-danger" (click)="deleteReply(index, i, replyIndex)">Delete</button>
+        </p>
+      </div>
+  
+      <!-- Comment Actions -->
+      <div class="comment-actions">
+        <button class="bi bi-heart btn btn-danger" (click)="likeComment(index, i)"><span *ngIf="comment?.likes" class="likes-count">{{ comment.likes }}</span></button>
+
+        <button class="btn btn-danger" (click)="deleteComment(i)">Delete</button>
+        <button class="btn btn-primary" (click)="setParentCommentIndex(i)">Reply</button>
+      </div>
+  
+      <!-- Reply Input -->
+      <div *ngIf="replyingTo === i" class="reply-input">
+        <input type="text" [(ngModel)]="replyComment" placeholder="Add a reply" />
+        <button class="btn btn-primary" (click)="addComment(index, replyComment, replyingTo)">Submit Reply</button>
+      </div>
+    </div>
+  </div>
+  

@@ -71,6 +71,20 @@ deleteComment(postIndex: number, commentIndex: number): void {
 }
 }
 
+deleteReply(postIndex: number, commentIndex: number, replyIndex: number): void {
+  if (
+    this.listofposts &&
+    this.listofposts[postIndex] &&
+    this.listofposts[postIndex].comments &&
+    this.listofposts[postIndex].comments[commentIndex]
+  ) {
+    this.listofposts[postIndex].comments[commentIndex].commentReplies = this.listofposts[postIndex].comments[commentIndex].commentReplies || [];
+    this.modifyPosts(() => this.listofposts[postIndex].comments[commentIndex].commentReplies.splice(replyIndex, 1));
+  } else {
+    console.error('Invalid postIndex, commentIndex, or replyIndex');
+  }
+}
+
 // deleteReply(postIndex: number, commentIndex: number, replyIndex: number) {
 //   if (
 //     this.posts?.comments &&

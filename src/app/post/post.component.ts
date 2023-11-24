@@ -2,12 +2,14 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Post, Comment } from '../post.model';
 import { PostService } from '../post_service';
 import { Router } from '@angular/router';
+
 @Component({
   selector: 'app-post',
   templateUrl: './post.component.html',
   styleUrls: ['./post.component.css']
 })
 export class PostComponent implements OnInit{
+
   comments: { text: string, commentReplies: { text: string, likes: number }[] }[] = [];
   commentIndex: number= 0;
   memberName = "lan"
@@ -22,7 +24,7 @@ export class PostComponent implements OnInit{
 
 
 
-  constructor(private postService: PostService, private router: Router,) {
+  constructor(private postService: PostService, private router: Router) {
     this.replyComment = '';
   }
     @Input() index: number = 0;
@@ -43,26 +45,54 @@ export class PostComponent implements OnInit{
     this.postService.LikePost(this.index);
   }
   
-  deleteComment(commentIndex: number) {
-    this.postService.deleteComment(this.index, commentIndex);
-  }
+  deleteReply(index: number, commentIndex: number, replyIndex: number) {
+  this.postService.deleteReply(index, commentIndex, replyIndex);
+}
 
-  // deleteReply(index: number,commentIndex: number, i: number, replyIndex: number){
-  //   this.postService.deleteReply(this.index, commentIndex, replyIndex);
-  // }
+deleteComment(commentIndex: number) {
+  this.postService.deleteComment(this.index, commentIndex);
+}
+//   deleteReply(commentIndex: number, replyIndex: number) {
+//     this.postService.deleteReply(this.index, commentIndex, replyIndex);
+// }
+
+//   deleteReply(postId: string, commentIndex: number, replyIndex: number) {
+//     const postRef = this.afs.doc(`posts/${postId}`);
+//     postRef.get().subscribe(doc => {
+//         if (doc.exists) {
+//             let post = doc.data() as Post;
+//             post.comments[commentIndex].replies.splice(replyIndex, 1);
+//             postRef.update(post);
+//         }
+//     });
+// }
+
 
 addComment(index: number, comment: string, parentCommentIndex?: number) {
   if (comment && this.replyingTo !== null) {
-    const newComment: Comment = { text: comment, commentReplies: [], likes: 0  };
+    const newComment: Comment = { text: comment, commentReplies: [], likes: 0, replies: [] };
     this.postService.addComment(index, newComment, parentCommentIndex);
     this.comment = ''; // Reset the comment input
     this.replyingTo = null; // Reset replyingTo after replying
   } else if (comment) {
-    const newComment: Comment = { text: comment, commentReplies: [], likes: 0  };
+    const newComment: Comment = { text: comment, commentReplies: [], likes: 0, replies: [] };
     this.postService.addComment(index, newComment);
     this.comment = ''; // Reset the comment input
   }
 }
+
+// addComment(index: number, comment: string, parentCommentIndex?: number) {
+//   if (comment && this.replyingTo !== null) {
+//     const newComment: Comment = { text: comment, commentReplies: [], likes: 0 };
+//     this.postService.addComment(index, newComment, parentCommentIndex);
+//     this.comment = ''; // Reset the comment input
+//     this.replyingTo = null; // Reset replyingTo after replying
+//   } else if (comment) {
+//     const newComment: Comment = { text: comment, commentReplies: [], likes: 0  };
+//     this.postService.addComment(index, newComment);
+//     this.comment = ''; // Reset the comment input
+//   }
+// }
 
 
 setParentCommentIndex(commentIndex: number | undefined) {
