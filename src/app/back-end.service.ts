@@ -27,6 +27,8 @@ export class BackEndService {
   
   // ...
   
+
+
   saveData() {
     const user = this.authService.getCurrentUser();
     if (user) {
@@ -34,20 +36,61 @@ export class BackEndService {
       console.log('User ID:', userId);
       const newlistofpost: Post[] = this.postService.getPost(userId);
       console.log('Posts:', newlistofpost);
-      this.http.put(`https://crud-b-8f2ce-default-rtdb.firebaseio.com/${userId}/post.json`, newlistofpost)
-      .pipe(
-        catchError(error => {
-          console.error('Error saving posts:', error);
-          return throwError(error);
-        })
-      )
-      .subscribe((res) => {
-        console.log(res);
-      });
+  
+      // First, fetch the existing posts
+      this.http.get<Post[]>('https://crud-b-8f2ce-default-rtdb.firebaseio.com/post.json')
+        .pipe(
+          catchError(error => {
+            console.error('Error fetching posts:', error);
+            return throwError(error);
+          })
+        )
+        .subscribe((existingPosts: Post[]) => {
+          // Append the new posts to the existing posts
+          const updatedPosts = [...existingPosts, ...newlistofpost];
+  
+          // Save the updated list of posts back to Firebase
+          this.http.put('https://crud-b-8f2ce-default-rtdb.firebaseio.com/post.json', updatedPosts)
+            .pipe(
+              catchError(error => {
+                console.error('Error saving posts:', error);
+                return throwError(error);
+              })
+            )
+            .subscribe((res) => {
+              console.log(res);
+            });
+        });
     } else {
       // handle the case when user is null
     }
   }
+
+
+
+
+  // saveData() {
+  //   const user = this.authService.getCurrentUser();
+  //   if (user) {
+  //     const userId = user.uid;
+  //     console.log('User ID:', userId);
+  //     const newlistofpost: Post[] = this.postService.getPost(userId);
+  //     console.log('Posts:', newlistofpost);
+  //     // this.http.put(`https://crud-b-8f2ce-default-rtdb.firebaseio.com/${userId}/post.json`, newlistofpost)
+  //     this.http.put('https://crud-b-8f2ce-default-rtdb.firebaseio.com/post.json', newlistofpost)
+  //     .pipe(
+  //       catchError(error => {
+  //         console.error('Error saving posts:', error);
+  //         return throwError(error);
+  //       })
+  //     )
+  //     .subscribe((res) => {
+  //       console.log(res);
+  //     });
+  //   } else {
+  //     // handle the case when user is null
+  //   }
+  // }
 
   // saveData() {
   //   const userId = this.authService.getCurrentUser().uid; // Get current user's ID
