@@ -1,4 +1,5 @@
 export class Post{
+
     constructor(
         public title: string,
         public imgPath: string,
@@ -6,8 +7,10 @@ export class Post{
         public author: string,
         public dateCreated: Date,
         public numberOfLikes: number,
-        public comments: Comment[] = []
+        public comments: Comment[] = [],
+        public userId?: string,
         ){
+
         }
 }
 
@@ -17,4 +20,10 @@ export interface Comment {
     text: string;
     commentReplies: Comment[];
 }
-  
+
+export interface User {
+    id: number;
+    name: string;
+    username: string; // Add this line
+    password: string;
+  }

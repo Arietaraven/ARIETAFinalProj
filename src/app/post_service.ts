@@ -2,6 +2,8 @@ import { EventEmitter, Injectable } from "@angular/core";
 import { Post, Comment } from "./post.model";
 import {Subject, Observable, retry } from "rxjs";
 import { HttpClient } from "@angular/common/http";
+import { AuthService } from "./auth.service";
+// import { UserService } from './user.service';
 
 
 @Injectable({providedIn: 'root'})
@@ -11,9 +13,10 @@ export class PostService{
   private postsUpdated = new Subject<Post[]>();
     private postsCache: Post[] = [];
   posts: any;
+  private postsByUser: { [key: string]: Post[] } = {}; // Add this line
     
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private authService: AuthService) {}
 
     listofposts: Post[]=[
     // new Post("tech crunch", "https://firstsiteguide.com/wp-content/uploads/2017/06/best-blog-examples.png", 
@@ -35,20 +38,93 @@ export class PostService{
     
   ]
   
-  getPost(){
-    return this.listofposts;
+  // getPost(){
+  //   return this.listofposts;
+  // }
 
-  }
+  getPost(userId: string){
+    return this.listofposts.filter(post => post.userId === userId);
+}
+//   getPost(userId: string): Post[] {
+//     return this.postsByUser[userId] || [];
+// }
 
   deletebutton(index: number): void {
     this.modifyPosts(() => this.listofposts.splice(index, 1));
 }
-  addPost(post: Post) {
-    this.listofposts.push(post)
-  }    
+  // addPost(post: Post) {
+  //   this.listofposts.push(post)
+  // } 
+
+  addPost(userId: string, post: Post) {
+    post.userId = userId;
+    this.listofposts.push(post);
+    this.saveData(); // Save data after adding a post
+  }
+
+//   addPost(post: Post) {
+//     this.authService.user$.subscribe(user => {
+//         if (user) {
+//             if (!this.postsByUser[user.uid]) {
+//                 this.postsByUser[user.uid] = [];
+//             }
+//             this.postsByUser[user.uid].push(post);
+//             this.saveData(); // Save the new post to Firebase
+//         }
+//     });
+// }
+
+  // addPost(title: string, imgPath: string, description: string, author: string) {
+  //   this.authService.user$.subscribe(user => {
+  //     if (user) {
+  //       const post: Post = { title, imgPath, description, author, dateCreated: new Date(), numberOfLikes: 0, comments: [], userId: user.uid };
+  //       this.listofposts.push(post);
+  //       this.saveData(); // Save the new post to Firebase
+  //     }
+  //   });
+  // }
+  // addPost(post: Post) {
+  //   this.authService.user$.subscribe(user => {
+  //     console.log('User:', user);
+  //     if (user && user.uid && user.email) {
+  //       post.userId = user.uid;
+  //       post.author = user.displayName || 'Default Author';
+  //       post.userEmail = user.email;
+  //       this.listofposts.push(post);
+  //       console.log('Post added:', post);
+  //     } else {
+  //       console.log('No user logged in or user does not have an email address');
+  //     }
+  //   });
+  // }
+  // addPost(post: Post) {
+  //   this.authService.user$.subscribe(user => {
+  //     if (user) {
+  //       post.userId = user.uid;
+  //       post.userEmail = user.email;
+  //       this.listofposts.push(post);
+  //     }
+  //   });
+  // }
+
+  // addPost(post: Post) {
+  //   this.userService.currentUser.subscribe(user => {
+  //     if (user) {
+  //       post.userId = user.id.toString();
+  //       this.listofposts.push(post);
+  //     }
+  //   });
+  // }
+  
+  // updatePost(index: number, post: Post){
+  //   this.listofposts[index]= post
+  // } 
+
   updatePost(index: number, post: Post){
-    this.listofposts[index]= post
-  } 
+    this.listofposts[index] = post;
+    this.saveData(); // Save data after updating a post
+  }
+
   getPostUpdateListener(): Observable<Post[]> {
     return this.postsUpdated.asObservable();
 }
@@ -161,12 +237,36 @@ likeReply(postIndex: number, commentIndex: number, replyIndex: number): void {
     this.postsUpdated.next([...this.listofposts]);
     this.saveData();
   }
+
+//   saveData(): void {
+//     this.authService.user$.subscribe(user => {
+//         if (user) {
+//             this.http.put<Post[]>(`https://crud-b-8f2ce-default-rtdb.firebaseio.com/${user.uid}/post.json`, this.postsByUser[user.uid])
+//                 .pipe(retry(3))
+//                 .subscribe({
+//                     next: () => console.log('Data saved successfully'),
+//                 });
+//         }
+//     });
+// }
+
+  // saveData(): void {
+  //   this.authService.user$.subscribe(user => {
+  //     if (user) {
+  //       this.http.put<Post[]>(`https://crud-b-8f2ce-default-rtdb.firebaseio.com/${user.uid}/post.json`, this.listofposts)
+  //         .pipe(retry(3))
+  //         .subscribe({
+  //           next: () => console.log('Data saved successfully'),
+  //         });
+  //     }
+  //   });
+  // }
   saveData(): void {
-    this.http.put<Post[]>('https://crud-b-8f2ce-default-rtdb.firebaseio.com/post.json', this.listofposts)
-        .pipe(retry(3))
-        .subscribe({
-            next: () => console.log('Data saved successfully'),
-        });
-}
+    this.http.put('https://crud-b-8f2ce-default-rtdb.firebaseio.com/post.json', this.listofposts)
+      .pipe(retry(3))
+      .subscribe({
+        next: () => console.log('Data saved successfully'),
+      });
+  }
 }  
   
