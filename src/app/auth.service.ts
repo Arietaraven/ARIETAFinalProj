@@ -6,6 +6,9 @@ import { map } from 'rxjs/operators';
 import { BehaviorSubject } from 'rxjs';
 import { getAuth } from "firebase/auth";
 
+
+
+
 @Injectable({
   providedIn: 'root'
 })
@@ -14,10 +17,17 @@ export class AuthService {
   user$ = this._user$.asObservable();
 
 
+
+
+
+
   constructor(private firebaseAuth: AngularFireAuth) { 
     this.firebaseAuth.authState.pipe(
       map(user => user ? { ...user, providerData: user.providerData.filter(pd => pd !== null) as UserInfo[] } : null)
     ).subscribe(user => this._user$.next(user));
+
+
+
   }
 
   async signIn(email: string, password: string): Promise<User | null> {
@@ -50,13 +60,17 @@ export class AuthService {
     await this.firebaseAuth.createUserWithEmailAndPassword(email, password);
   }
 
-  async signOut() {
+  async logout() {
     await this.firebaseAuth.signOut();
   }
 
   getCurrentUser() {
     const auth = getAuth();
     return auth.currentUser;
+  }
+  isLoggedIn(): boolean {
+    const auth = getAuth();
+    return auth.currentUser !== null;
   }
 }
 

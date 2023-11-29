@@ -7,6 +7,12 @@ import { AuthService } from './auth.service';
 import { throwError } from 'rxjs'; // Add this import at the top of your file
 import { catchError } from 'rxjs/operators'; // Add this import at the top of your file
 import { of } from 'rxjs'; 
+import { map } from 'rxjs/operators';
+
+
+interface PostsResponse {
+  [key: string]: Post;
+}
 
 @Injectable({
   providedIn: 'root'
@@ -156,27 +162,93 @@ export class BackEndService {
   //       })
   //     );
   // }
+  // fetchData() {
+  //   return this.http.get<Post[]>('https://crud-b-8f2ce-default-rtdb.firebaseio.com/post.json')
+  //     .pipe(
+  //       tap((newlistofpost: Post[]) => {
+  //         console.log(newlistofpost);
+  
+  //         // Ensure each post has comments array and date object
+  //         if (Array.isArray(newlistofpost)) {
+  //           newlistofpost.forEach(post => this.ensurePostHasCommentsArrayAndDateObject(post));
+  //         } else {
+  //           console.error('newlistofpost is not an array:', newlistofpost);
+  //         }
+  
+  //         this.postService.setPost(newlistofpost);
+  //       })
+  //     );
+  // }
+
+
   fetchData() {
-    return this.http.get<Post[]>('https://crud-b-8f2ce-default-rtdb.firebaseio.com/post.json')
+    return this.http.get<PostsResponse>('https://crud-b-8f2ce-default-rtdb.firebaseio.com/post.json')
       .pipe(
+        map((responseData: PostsResponse) => {
+          const postsArray = [];
+          for (const key in responseData) {
+            if (responseData.hasOwnProperty(key)) {
+              postsArray.push({ ...responseData[key] });
+            }
+          }
+          return postsArray;
+        }),
         tap((newlistofpost: Post[]) => {
           console.log(newlistofpost);
   
           // Ensure each post has comments array and date object
-          newlistofpost.forEach(post => this.ensurePostHasCommentsArrayAndDateObject(post));
+          if (Array.isArray(newlistofpost)) {
+            newlistofpost.forEach(post => this.ensurePostHasCommentsArrayAndDateObject(post));
+          } else {
+            console.error('newlistofpost is not an array:', newlistofpost);
+          }
   
           this.postService.setPost(newlistofpost);
         })
       );
   }
+  // fetchData() {
+  //   return this.http.get<Post[]>('https://crud-b-8f2ce-default-rtdb.firebaseio.com/post.json')
+  //     .pipe(
+  //       tap((newlistofpost: Post[]) => {
+  //         console.log(newlistofpost);
+  
+  //         // Ensure each post has comments array and date object
+  //         if (Array.isArray(newlistofpost)) {
+  //           newlistofpost.forEach(post => this.ensurePostHasCommentsArrayAndDateObject(post));
+  //         } else {
+  //           console.error('newlistofpost is not an array:', newlistofpost);
+  //         }
+  
+  //         this.postService.setPost(newlistofpost);
+  //       })
+  //     );
+  // }
+  // fetchData() {
+  //   return this.http.get<Post[]>('https://crud-b-8f2ce-default-rtdb.firebaseio.com/post.json')
+  //     .pipe(
+  //       tap((newlistofpost: Post[]) => {
+  //         console.log(newlistofpost);
+  
+          
+  //         newlistofpost.forEach(post => this.ensurePostHasCommentsArrayAndDateObject(post));
+  
+  //         this.postService.setPost(newlistofpost);
+  //       })
+  //     );
+  // }
   
   // Function to ensure post has comments array and date object
   ensurePostHasCommentsArrayAndDateObject(post: Post) {
-    if (!post.comments) {
-      post.comments = []; // Ensure there's a comments array
-    }
+    if (post) {
+      // post.comments = []; 
+      post.comments = post.comments || [];// Ensure there's a comments array
+    }else {
+      console.error('Post is null');
+  
 
   }
 
 
+}
 }
