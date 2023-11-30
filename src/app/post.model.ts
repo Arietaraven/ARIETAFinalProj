@@ -9,6 +9,8 @@ export class Post{
         public numberOfLikes: number,
         public comments: Comment[] = [],
         public userId?: string,
+        public likedByUsers?: string[],
+        public postId?: string
         ){
 
         }

@@ -32,34 +32,32 @@ export class BackEndService {
 
   
   // ...
-  
-
-
-  saveData() {
+  saveData(post?: Post) {
     const user = this.authService.getCurrentUser();
     if (user) {
       const userId = user.uid;
       console.log('User ID:', userId);
-      const newlistofpost: Post[] = this.postService.getPost(userId);
-      console.log('Posts:', newlistofpost);
-  
-      // First, fetch the existing posts
-      this.http.get<Post[]>('https://crud-b-8f2ce-default-rtdb.firebaseio.com/post.json')
-        .pipe(
-          catchError(error => {
-            console.error('Error fetching posts:', error);
-            return throwError(error);
-          })
-        )
-        .subscribe((existingPosts: Post[]) => {
-          // Append the new posts to the existing posts
-          const updatedPosts = [...existingPosts, ...newlistofpost];
-  
-          // Save the updated list of posts back to Firebase
-          this.http.put('https://crud-b-8f2ce-default-rtdb.firebaseio.com/post.json', updatedPosts)
+      if (post) {
+        // If a Post object is provided, update the specific post
+        this.http.put(`https://crud-b-8f2ce-default-rtdb.firebaseio.com/post/${post.postId}.json`, post)
+          .pipe(
+            catchError(error => {
+              console.error('Error saving post:', error);
+              return throwError(error);
+            })
+          )
+          .subscribe((res) => {
+            console.log(res);
+          });
+      } else {
+        // If no Post object is provided, save all posts
+        const newlistofpost: Post[] = this.postService.getPost(userId);
+        console.log('Posts:', newlistofpost);
+        newlistofpost.forEach(post => {
+          this.http.post(`https://crud-b-8f2ce-default-rtdb.firebaseio.com/post/${userId}.json`, post)
             .pipe(
               catchError(error => {
-                console.error('Error saving posts:', error);
+                console.error('Error saving post:', error);
                 return throwError(error);
               })
             )
@@ -67,10 +65,334 @@ export class BackEndService {
               console.log(res);
             });
         });
+      }
     } else {
       // handle the case when user is null
     }
   }
+
+
+  // saveData(post?: Post) {
+  //   const user = this.authService.getCurrentUser();
+  //   if (user) {
+  //     const userId = user.uid;
+  //     console.log('User ID:', userId);
+  //     if (post) {
+  //       // If a Post object is provided, add it to the user's posts
+  //       this.http.post(`https://crud-b-8f2ce-default-rtdb.firebaseio.com/posts/${userId}.json`, post)
+  //         .pipe(
+  //           catchError(error => {
+  //             console.error('Error saving post:', error);
+  //             return throwError(error);
+  //           })
+  //         )
+  //         .subscribe((res) => {
+  //           console.log(res);
+  //         });
+  //     } else {
+  //       // If no Post object is provided, save all posts
+  //       const newlistofpost: Post[] = this.postService.getPost(userId);
+  //       console.log('Posts:', newlistofpost);
+  //       newlistofpost.forEach(post => {
+  //         this.http.post(`https://crud-b-8f2ce-default-rtdb.firebaseio.com/posts/${userId}.json`, post)
+  //           .pipe(
+  //             catchError(error => {
+  //               console.error('Error saving post:', error);
+  //               return throwError(error);
+  //             })
+  //           )
+  //           .subscribe((res) => {
+  //             console.log(res);
+  //           });
+  //       });
+  //     }
+  //   } else {
+  //     // handle the case when user is null
+  //   }
+  // }
+  // saveData(post?: Post) {
+  //   const user = this.authService.getCurrentUser();
+  //   if (user) {
+  //     const userId = user.uid;
+  //     console.log('User ID:', userId);
+  //     if (post) {
+  //       // If a Post object is provided, update the specific post
+  //       this.http.put(`https://crud-b-8f2ce-default-rtdb.firebaseio.com/posts/${post.postId}.json`, post)
+  //         .pipe(
+  //           catchError(error => {
+  //             console.error('Error saving post:', error);
+  //             return throwError(error);
+  //           })
+  //         )
+  //         .subscribe((res) => {
+  //           console.log(res);
+  //         });
+  //     } else {
+  //       // If no Post object is provided, save all posts
+  //       const newlistofpost: Post[] = this.postService.getPost(userId);
+  //       console.log('Posts:', newlistofpost);
+  //       newlistofpost.forEach(post => {
+  //         this.http.post(`https://crud-b-8f2ce-default-rtdb.firebaseio.com/posts/${userId}.json`, post)
+  //           .pipe(
+  //             catchError(error => {
+  //               console.error('Error saving post:', error);
+  //               return throwError(error);
+  //             })
+  //           )
+  //           .subscribe((res) => {
+  //             console.log(res);
+  //           });
+  //       });
+  //     }
+  //   } else {
+  //     // handle the case when user is null
+  //   }
+  // }
+
+
+
+
+
+
+  // saveData(post?: Post) {
+  //   const user = this.authService.getCurrentUser();
+  //   if (user) {
+  //     const userId = user.uid;
+  //     console.log('User ID:', userId);
+  //     if (post) {
+  //       // If a Post object is provided, update the specific post
+  //       this.http.put(`https://crud-b-8f2ce-default-rtdb.firebaseio.com/posts/${post.postId}.json`, post)
+  //         .pipe(
+  //           catchError(error => {
+  //             console.error('Error saving post:', error);
+  //             return throwError(error);
+  //           })
+  //         )
+  //         .subscribe((res) => {
+  //           console.log(res);
+  //         });
+  //     } else {
+  //       // If no Post object is provided, save all posts
+  //       const newlistofpost: Post[] = this.postService.getPost(userId);
+  //       console.log('Posts:', newlistofpost);
+  //       const postsObject = newlistofpost.reduce((obj: { [key: string]: Post }, post) => {
+  //         const postId = post.postId || this.generateUniqueId(); // Generate a unique ID if postId is undefined
+  //         obj[postId] = post;
+  //         return obj;
+  //       }, {});
+  //       this.http.put(`https://crud-b-8f2ce-default-rtdb.firebaseio.com/posts.json`, postsObject)
+  //         .pipe(
+  //           catchError(error => {
+  //             console.error('Error saving posts:', error);
+  //             return throwError(error);
+  //           })
+  //         )
+  //         .subscribe((res) => {
+  //           console.log(res);
+  //         });
+  //     }
+  //   } else {
+  //     // handle the case when user is null
+  //   }
+  // }
+  
+  // generateUniqueId(): string {
+  //   return new Date().getTime().toString();
+  // }
+
+
+
+  // saveData(post?: Post) {
+  //   const user = this.authService.getCurrentUser();
+  //   if (user) {
+  //     const userId = user.uid;
+  //     console.log('User ID:', userId);
+  //     if (post) {
+  //       // If a Post object is provided, update the specific post
+  //       this.http.put(`https://crud-b-8f2ce-default-rtdb.firebaseio.com/posts/${post.postId}.json`, post)
+  //         .pipe(
+  //           catchError(error => {
+  //             console.error('Error saving post:', error);
+  //             return throwError(error);
+  //           })
+  //         )
+  //         .subscribe((res) => {
+  //           console.log(res);
+  //         });
+  //     } else {
+  //       // If no Post object is provided, save all posts
+  //       const newlistofpost: Post[] = this.postService.getPost(userId);
+  //       console.log('Posts:', newlistofpost);
+  //       const postsObject = newlistofpost.reduce((obj: { [key: string]: Post }, post) => {
+  //         obj[post.postId] = post;
+  //         return obj;
+  //       }, {});
+  //       this.http.put(`https://crud-b-8f2ce-default-rtdb.firebaseio.com/posts.json`, postsObject)
+  //         .pipe(
+  //           catchError(error => {
+  //             console.error('Error saving posts:', error);
+  //             return throwError(error);
+  //           })
+  //         )
+  //         .subscribe((res) => {
+  //           console.log(res);
+  //         });
+  //     }
+  //   } else {
+  //     // handle the case when user is null
+  //   }
+  // }
+
+
+
+
+  // saveData(post?: Post) {
+  //   const user = this.authService.getCurrentUser();
+  //   if (user) {
+  //     const userId = user.uid;
+  //     console.log('User ID:', userId);
+  //     if (post) {
+  //       // If a Post object is provided, update the specific post
+  //       this.http.put(`https://crud-b-8f2ce-default-rtdb.firebaseio.com/post.json`, post)
+  //         .pipe(
+  //           catchError(error => {
+  //             console.error('Error saving post:', error);
+  //             return throwError(error);
+  //           })
+  //         )
+  //         .subscribe((res) => {
+  //           console.log(res);
+  //         });
+  //     } else {
+  //       // If no Post object is provided, save all posts
+  //       const newlistofpost: Post[] = this.postService.getPost(userId);
+  //       console.log('Posts:', newlistofpost);
+  //       this.http.put(`https://crud-b-8f2ce-default-rtdb.firebaseio.com/post.json`, newlistofpost)
+  //         .pipe(
+  //           catchError(error => {
+  //             console.error('Error saving posts:', error);
+  //             return throwError(error);
+  //           })
+  //         )
+  //         .subscribe((res) => {
+  //           console.log(res);
+  //         });
+  //     }
+  //   } else {
+  //     // handle the case when user is null
+  //   }
+  // }
+
+
+  // saveData(post?: Post) {
+  //   const user = this.authService.getCurrentUser();
+  //   if (user) {
+  //     const userId = user.uid;
+  //     console.log('User ID:', userId);
+  //     if (post) {
+  //       // If a Post object is provided, update the specific post
+  //       this.http.put(`https://crud-b-8f2ce-default-rtdb.firebaseio.com/posts/.json`, post)
+  //         .pipe(
+  //           catchError(error => {
+  //             console.error('Error saving post:', error);
+  //             return throwError(error);
+  //           })
+  //         )
+  //         .subscribe((res) => {
+  //           console.log(res);
+  //         });
+  //     } else {
+  //       // If no Post object is provided, save all posts
+  //       const newlistofpost: Post[] = this.postService.getPost(userId);
+  //       console.log('Posts:', newlistofpost);
+  //       this.http.put(`https://crud-b-8f2ce-default-rtdb.firebaseio.com/posts.json`, newlistofpost)
+  //         .pipe(
+  //           catchError(error => {
+  //             console.error('Error saving posts:', error);
+  //             return throwError(error);
+  //           })
+  //         )
+  //         .subscribe((res) => {
+  //           console.log(res);
+  //         });
+  //     }
+  //   } else {
+  //     // handle the case when user is null
+  //   }
+  // }
+// saveData(post?: Post) {
+//   const user = this.authService.getCurrentUser();
+//   if (user) {
+//     const userId = user.uid;
+//     console.log('User ID:', userId);
+//     if (post) {
+//       // If a Post object is provided, update the specific post
+//       this.http.put(`https://crud-b-8f2ce-default-rtdb.firebaseio.com/posts/${userId}.json`, post)
+//         .pipe(
+//           catchError(error => {
+//             console.error('Error saving post:', error);
+//             return throwError(error);
+//           })
+//         )
+//         .subscribe((res) => {
+//           console.log(res);
+//         });
+//     } else {
+//       // If no Post object is provided, save all posts
+//       const newlistofpost: Post[] = this.postService.getPost(userId);
+//       console.log('Posts:', newlistofpost);
+//       this.http.put(`https://crud-b-8f2ce-default-rtdb.firebaseio.com/posts/${userId}.json`, newlistofpost)
+//         .pipe(
+//           catchError(error => {
+//             console.error('Error saving posts:', error);
+//             return throwError(error);
+//           })
+//         )
+//         .subscribe((res) => {
+//           console.log(res);
+//         });
+//     }
+//   } else {
+//     // handle the case when user is null
+//   }
+// }
+
+  // saveData() {
+  //   const user = this.authService.getCurrentUser();
+  //   if (user) {
+  //     const userId = user.uid;
+  //     console.log('User ID:', userId);
+  //     const newlistofpost: Post[] = this.postService.getPost(userId);
+  //     console.log('Posts:', newlistofpost);
+  
+  //     // First, fetch the existing posts
+  //     this.http.get<Post[]>('https://crud-b-8f2ce-default-rtdb.firebaseio.com/post.json')
+  //       .pipe(
+  //         catchError(error => {
+  //           console.error('Error fetching posts:', error);
+  //           return throwError(error);
+  //         })
+  //       )
+  //       .subscribe((existingPosts: Post[]) => {
+  //         // Append the new posts to the existing posts
+  //         const updatedPosts = [...existingPosts, ...newlistofpost];
+  
+  //         // Save the updated list of posts back to Firebase
+  //         this.http.put('https://crud-b-8f2ce-default-rtdb.firebaseio.com/post.json', updatedPosts)
+  //           .pipe(
+  //             catchError(error => {
+  //               console.error('Error saving posts:', error);
+  //               return throwError(error);
+  //             })
+  //           )
+  //           .subscribe((res) => {
+  //             console.log(res);
+  //           });
+  //       });
+  //   } else {
+  //     // handle the case when user is null
+  //   }
+  // }
 
 
 

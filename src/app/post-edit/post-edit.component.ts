@@ -82,43 +82,85 @@ export class PostEditComponent {
 //     this.router.navigate(['post-list']);
 //   }
 
+onSubmit() {
+  console.log('onSubmit called');
+  const title = this.form.value.title;
+  const imgPath = this.form.value.imgPath;
+  const description = this.form.value.description;
+  const numberOfLikes = this.form.value.numberOfLikes;
 
-  onSubmit() {
-    const title = this.form.value.title;
-    const imgPath = this.form.value.imgPath;
-    const description = this.form.value.description;
-    const numberOfLikes = this.form.value.numberOfLikes;
+  let comments: Comment[] = [];
+  if (this.editMode) {
+    comments = this.postservice.getSpecPost(this.index).comments;
+  }
+  const post: Post = new Post(title, imgPath, description,'', new Date(), 0, comments);
 
-let comments: Comment[] = [];
-if (this.editMode) {
-  comments = this.postservice.getSpecPost(this.index).comments;
+  const currentUser = this.authService.getCurrentUser();
+  console.log('Current user:', currentUser);
+  const userId = currentUser ? currentUser.uid : '';
+
+  post.userId = userId; // Set the userId field of the post
+
+  if(this.editMode==true){
+    console.log('Updating post');
+    this.postservice.updatePost(this.index, post);
+    this.backEndService.saveData(post);
+  }
+  else {
+    // this.postservice.addPost(post);
+    if (userId !== '') {
+      console.log('Adding new post');
+      this.postservice.addPost(userId, post);
+    } else {
+      // Handle the case when userId is null
+      // For example, show an error message
+      console.error("User ID is null");
+    }
+    // this.postservice.addPost(post.title, post.imgPath, post.description, post.author);
+    this.backEndService.saveData(post);
+  }
+
+  this.router.navigate(['post-list']);
 }
-const post: Post = new Post(title, imgPath, description,'', new Date(), 0, comments);
+//   onSubmit() {
+//     console.log('onSubmit called');
+//     const title = this.form.value.title;
+//     const imgPath = this.form.value.imgPath;
+//     const description = this.form.value.description;
+//     const numberOfLikes = this.form.value.numberOfLikes;
 
-const currentUser = this.authService.getCurrentUser();
-const userId = currentUser ? currentUser.uid : null;
+// let comments: Comment[] = [];
+// if (this.editMode) {
+//   comments = this.postservice.getSpecPost(this.index).comments;
+// }
+// const post: Post = new Post(title, imgPath, description,'', new Date(), 0, comments);
+
+// const currentUser = this.authService.getCurrentUser();
+// console.log('Current user:', currentUser);
+// const userId = currentUser ? currentUser.uid : null;
 
 
-      if(this.editMode==true){
-        this.postservice.updatePost(this.index, post)
-        this.backEndService.saveData();
-      }
-      else {
-        // this.postservice.addPost(post);
-        if (userId !== null) {
-          this.postservice.addPost(userId, post);
-        } else {
-          // Handle the case when userId is null
-          // For example, show an error message
-          console.error("User ID is null");
-        }
-        // this.postservice.addPost(post.title, post.imgPath, post.description, post.author);
-        this.backEndService.saveData();
-      }
+//       if(this.editMode==true){
+//         console.log('Updating post');
+//         this.postservice.updatePost(this.index, post)
+//         this.backEndService.saveData();
+//       }
+//       else {
+//         // this.postservice.addPost(post);
+//         if (userId !== null) {
+//           this.postservice.addPost(userId, post);
+//         } else {
+//           // Handle the case when userId is null
+//           // For example, show an error message
+//           console.error("User ID is null");
+//         }
+//         // this.postservice.addPost(post.title, post.imgPath, post.description, post.author);
+//         this.backEndService.saveData();
+//       }
    
 
-    this.router.navigate(['post-list']);
-  }
+//     this.router.navigate(['post-list']);
+//   }
 
 
 // onSubmit() {

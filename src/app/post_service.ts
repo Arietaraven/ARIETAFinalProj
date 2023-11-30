@@ -49,8 +49,19 @@ export class PostService{
 //     return this.postsByUser[userId] || [];
 // }
 
-  deletebutton(index: number): void {
+//   deletebutton(index: number): void {
+//     this.modifyPosts(() => this.listofposts.splice(index, 1));
+// }
+
+deletebutton(index: number): void {
+  const post = this.listofposts[index];
+  const currentUser = this.authService.getCurrentUser();
+  if (currentUser && post.userId === currentUser.uid) {
     this.modifyPosts(() => this.listofposts.splice(index, 1));
+  } else {
+    console.error("You can't delete this post because you're not the author.");
+    // Optionally, display a message to the user
+  }
 }
   // addPost(post: Post) {
   //   this.listofposts.push(post)
@@ -121,6 +132,7 @@ export class PostService{
   // } 
 
   updatePost(index: number, post: Post){
+    console.log('updatePost called with index:', index, 'and post:', post);
     this.listofposts[index] = post;
     this.saveData(); // Save data after updating a post
   }
@@ -133,10 +145,25 @@ export class PostService{
     return this.listofposts[index];
   } 
 
-  LikePost(index: number){
-    this.listofposts[index].numberOfLikes++;
-    this.listChangeEvent.emit(this.listofposts);
-    this.saveData();
+//   LikePost(index: number){
+//     this.listofposts[index].numberOfLikes++;
+//     this.listChangeEvent.emit(this.listofposts);
+//     this.saveData();
+// }
+LikePost(index: number){
+  const post = this.listofposts[index];
+  const currentUser = this.authService.getCurrentUser();
+  if (currentUser && post.likedByUsers && post.likedByUsers.includes(currentUser.uid)) {
+    console.log("You've already liked this post.");
+    return;
+  }
+  post.numberOfLikes++;
+  if (currentUser) {
+    post.likedByUsers = post.likedByUsers || [];
+    post.likedByUsers.push(currentUser.uid);
+  }
+  this.listChangeEvent.emit(this.listofposts);
+  this.saveData();
 }
 
 deleteComment(postIndex: number, commentIndex: number): void {
