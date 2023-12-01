@@ -22,6 +22,7 @@ export interface Comment {
     likes: number;
     text: string;
     commentReplies: Comment[];
+    userId?: string;
 }
 
 export interface User {

@@ -56,7 +56,10 @@
     </p>
   
     <div class="post-actions">
-      <button (click)="onClick()" class="bi bi-heart btn btn-danger">
+      <!-- <button (click)="onClick()" class="bi bi-heart btn btn-danger">
+        {{post?.numberOfLikes}}
+      </button> -->
+      <button (click)="onClick()" class="bi btn btn-danger" [ngClass]="{'bi-heart-fill': hasUserLikedPost(), 'bi-heart': !hasUserLikedPost()}">
         {{post?.numberOfLikes}}
       </button>
       <!-- <button class="btn btn-primary" (click)="onEdit()">Edit</button> -->
@@ -77,7 +80,10 @@
       <div *ngFor="let reply of comment.commentReplies; let replyIndex = index" class="reply-container">
         <p *ngIf="reply?.text" class="reply-text">
           {{ reply.text }}<br>
-          <button class="bi bi-heart btn btn-danger" (click)="likeReply(index, i, replyIndex)"><span *ngIf="reply?.likes" class="likes-count">{{ reply.likes }} </span></button>
+          <button (click)="likeReply(index, i, replyIndex)" class="bi btn btn-danger" [ngClass]="{'bi-heart-fill': hasUserLikedReply(i, replyIndex), 'bi-heart': !hasUserLikedReply(i, replyIndex)}">
+            <span *ngIf="reply?.likes">{{ reply.likes }}</span>
+          </button>
+          <!-- <button class="bi bi-heart btn btn-danger" (click)="likeReply(index, i, replyIndex)"><span *ngIf="reply?.likes" class="likes-count">{{ reply.likes }} </span></button> -->
           
           <button class="btn btn-danger" (click)="deleteReply(index, i, replyIndex)">Delete</button>
         </p>
@@ -85,7 +91,10 @@
   
       <!-- Comment Actions -->
       <div class="comment-actions">
-        <button class="bi bi-heart btn btn-danger" (click)="likeComment(index, i)"><span *ngIf="comment?.likes" class="likes-count">{{ comment.likes }}</span></button>
+        <button (click)="likeComment(i)" class="bi btn btn-danger" [ngClass]="{'bi-heart-fill': hasUserLikedComment(i), 'bi-heart': !hasUserLikedComment(i)}">
+          <span *ngIf="comment?.likes">{{ comment.likes }}</span>
+        </button>
+        <!-- <button class="bi bi-heart btn btn-danger" (click)="likeComment(index, i)"><span *ngIf="comment?.likes" class="likes-count">{{ comment.likes }}</span></button> -->
         <!-- <button class="bi bi-heart btn btn-danger" (click)="likeComment(i)"><span *ngIf="comment?.likes" class="likes-count">{{ comment.likes }}</span></button> -->
 
         <button class="btn btn-danger" (click)="deleteComment(i)">Delete</button>

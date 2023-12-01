@@ -250,33 +250,81 @@ addComment(index: number, comment: Comment, parentCommentIndex?: number) {
     this.saveData();
   }
 }
+// likeComment(postIndex: number, commentIndex: number): void {
+//   if (this.listofposts && this.listofposts[postIndex] && this.listofposts[postIndex].comments) {
+//     const comment = this.listofposts[postIndex].comments[commentIndex];
+//     if (comment) {
+//       comment.likes = (comment.likes || 0) + 1;
+//       this.listChangeEvent.emit(this.listofposts);
+//       this.saveData();
+//     }
+//   }
+// }
+
 likeComment(postIndex: number, commentIndex: number): void {
-  if (this.listofposts && this.listofposts[postIndex] && this.listofposts[postIndex].comments) {
-    const comment = this.listofposts[postIndex].comments[commentIndex];
-    if (comment) {
-      comment.likes = (comment.likes || 0) + 1;
-      this.listChangeEvent.emit(this.listofposts);
-      this.saveData();
+  const post = this.listofposts[postIndex];
+  const comment = post.comments[commentIndex];
+  const currentUser = this.authService.getCurrentUser();
+  if (currentUser) {
+    comment.likedByUsers = comment.likedByUsers || [];
+    if (comment.likedByUsers.includes(currentUser.uid)) {
+      // If the user has already liked the comment, unlike it
+      const userIndex = comment.likedByUsers.indexOf(currentUser.uid);
+      comment.likedByUsers.splice(userIndex, 1);
+      comment.likes--;
+      console.log("You've unliked this comment.");
+    } else {
+      // If the user hasn't liked the comment, like it
+      comment.likedByUsers.push(currentUser.uid);
+      comment.likes++;
+      console.log("You've liked this comment.");
     }
+    this.listChangeEvent.emit(this.listofposts);
+    this.saveData();
   }
 }
 
+
+
 likeReply(postIndex: number, commentIndex: number, replyIndex: number): void {
-  if (
-    this.listofposts &&
-    this.listofposts[postIndex] &&
-    this.listofposts[postIndex].comments &&
-    this.listofposts[postIndex].comments[commentIndex] &&
-    this.listofposts[postIndex].comments[commentIndex].commentReplies
-  ) {
-    const reply = this.listofposts[postIndex].comments[commentIndex].commentReplies[replyIndex];
-    if (reply) {
-      reply.likes = (reply.likes || 0) + 1;
-      this.listChangeEvent.emit(this.listofposts);
-      this.saveData();
+  const post = this.listofposts[postIndex];
+  const comment = post.comments[commentIndex];
+  const reply = comment.commentReplies[replyIndex];
+  const currentUser = this.authService.getCurrentUser();
+  if (currentUser) {
+    reply.likedByUsers = reply.likedByUsers || [];
+    if (reply.likedByUsers.includes(currentUser.uid)) {
+      // If the user has already liked the reply, unlike it
+      const userIndex = reply.likedByUsers.indexOf(currentUser.uid);
+      reply.likedByUsers.splice(userIndex, 1);
+      reply.likes--;
+      console.log("You've unliked this reply.");
+    } else {
+      // If the user hasn't liked the reply, like it
+      reply.likedByUsers.push(currentUser.uid);
+      reply.likes++;
+      console.log("You've liked this reply.");
     }
+    this.listChangeEvent.emit(this.listofposts);
+    this.saveData();
   }
 }
+// likeReply(postIndex: number, commentIndex: number, replyIndex: number): void {
+//   if (
+//     this.listofposts &&
+//     this.listofposts[postIndex] &&
+//     this.listofposts[postIndex].comments &&
+//     this.listofposts[postIndex].comments[commentIndex] &&
+//     this.listofposts[postIndex].comments[commentIndex].commentReplies
+//   ) {
+//     const reply = this.listofposts[postIndex].comments[commentIndex].commentReplies[replyIndex];
+//     if (reply) {
+//       reply.likes = (reply.likes || 0) + 1;
+//       this.listChangeEvent.emit(this.listofposts);
+//       this.saveData();
+//     }
+//   }
+// }
   setPost(newlistofpost:Post[]) {
     this.listofposts = newlistofpost;
     this.listChangeEvent.emit(newlistofpost);

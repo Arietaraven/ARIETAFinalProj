@@ -63,6 +63,21 @@ export class PostComponent implements OnInit{
   onClick() {
     this.postService.LikePost(this.index);
   }
+  hasUserLikedPost(): boolean {
+    const currentUser = this.authService.getCurrentUser();
+    return this.post?.likedByUsers?.includes(currentUser?.uid || '') || false;
+  }
+  hasUserLikedComment(commentIndex: number): boolean {
+    const currentUser = this.authService.getCurrentUser();
+    const comment = this.post?.comments[commentIndex];
+    return comment?.likedByUsers?.includes(currentUser?.uid || '') || false;
+  }
+  
+  hasUserLikedReply(commentIndex: number, replyIndex: number): boolean {
+    const currentUser = this.authService.getCurrentUser();
+    const reply = this.post?.comments[commentIndex]?.commentReplies[replyIndex];
+    return reply?.likedByUsers?.includes(currentUser?.uid || '') || false;
+  }
   
   deleteReply(index: number, commentIndex: number, replyIndex: number) {
   this.postService.deleteReply(index, commentIndex, replyIndex);
@@ -87,16 +102,26 @@ deleteComment(commentIndex: number) {
 // }
 
 
-addComment(index: number, comment: string, parentCommentIndex?: number) {
-  if (comment && this.replyingTo !== null) {
-    const newComment: Comment = { text: comment, commentReplies: [], likes: 0, replies: [] };
+// addComment(index: number, comment: string, parentCommentIndex?: number) {
+//   if (comment && this.replyingTo !== null) {
+//     const newComment: Comment = { text: comment, commentReplies: [], likes: 0, replies: [] };
+//     this.postService.addComment(index, newComment, parentCommentIndex);
+//     this.comment = ''; 
+//     this.replyingTo = null; 
+//   } else if (comment) {
+//     const newComment: Comment = { text: comment, commentReplies: [], likes: 0, replies: [] };
+//     this.postService.addComment(index, newComment);
+//     this.comment = '';
+//   }
+// }
+
+addComment(index: number, commentText: string, parentCommentIndex?: number) {
+  const currentUser = this.authService.getCurrentUser();
+  if (currentUser && commentText) {
+    const newComment: Comment = { text: commentText, commentReplies: [], likes: 0, replies: [], userId: currentUser.uid };
     this.postService.addComment(index, newComment, parentCommentIndex);
     this.comment = ''; // Reset the comment input
     this.replyingTo = null; // Reset replyingTo after replying
-  } else if (comment) {
-    const newComment: Comment = { text: comment, commentReplies: [], likes: 0, replies: [] };
-    this.postService.addComment(index, newComment);
-    this.comment = ''; // Reset the comment input
   }
 }
 
@@ -118,8 +143,11 @@ setParentCommentIndex(commentIndex: number | undefined) {
   this.replyingTo = commentIndex;
 }
 
-likeComment(postIndex: number, commentIndex: number): void {
-  this.postService.likeComment(postIndex, commentIndex);
+// likeComment(postIndex: number, commentIndex: number): void {
+//   this.postService.likeComment(postIndex, commentIndex);
+// }
+likeComment(commentIndex: number): void {
+  this.postService.likeComment(this.index, commentIndex);
 }
 
 // likeComment(commentIndex: number): void {
