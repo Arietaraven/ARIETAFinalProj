@@ -1,8 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Post, Comment } from '../post.model';
+import { Post, Comment, User } from '../post.model';
 import { PostService } from '../post_service';
 import { Router } from '@angular/router';
 import { AuthService } from '../auth.service';
+
+
 
 @Component({
   selector: 'app-post',
@@ -34,10 +36,14 @@ export class PostComponent implements OnInit{
     @Input() post?: Post;
 
 
-   
-  ngOnInit(): void {
-    console.log(this.post);
-  }
+    currentUser: any;
+
+    ngOnInit(): void {
+      this.currentUser = this.authService.getCurrentUser();
+    }
+  // ngOnInit(): void {
+  //   console.log(this.post);
+  // }
   delete() {
     this.postService.deletebutton(this.index);
   }
@@ -115,6 +121,29 @@ setParentCommentIndex(commentIndex: number | undefined) {
 likeComment(postIndex: number, commentIndex: number): void {
   this.postService.likeComment(postIndex, commentIndex);
 }
+
+// likeComment(commentIndex: number): void {
+//   if (this.post && this.post.comments) {
+//     const comment = this.post.comments[commentIndex];
+//     const currentUser = this.authService.getCurrentUser();
+//     if (comment && currentUser) {
+//       comment.likedByUsers = comment.likedByUsers || [];
+//       if (comment.likedByUsers.includes(currentUser.uid)) {
+//         // If the user has already liked the comment, unlike it
+//         const userIndex = comment.likedByUsers.indexOf(currentUser.uid);
+//         comment.likedByUsers.splice(userIndex, 1);
+//         comment.likes--;
+//         console.log("You've unliked this comment.");
+//       } else {
+//         // If the user hasn't liked the comment, like it
+//         comment.likedByUsers.push(currentUser.uid);
+//         comment.likes++;
+//         console.log("You've liked this comment.");
+//       }
+//       this.postService.updatePost(this.index, this.post);
+//     }
+//   }
+// }
 
   likeReply(postIndex: number, commentIndex: number, replyIndex: number): void {
     const reply = this.post?.comments[commentIndex]?.commentReplies[replyIndex];

@@ -18,6 +18,7 @@ export class Post{
 
 export interface Comment {
     replies: Comment[];
+    likedByUsers?: string[];
     likes: number;
     text: string;
     commentReplies: Comment[];

@@ -150,21 +150,44 @@ deletebutton(index: number): void {
 //     this.listChangeEvent.emit(this.listofposts);
 //     this.saveData();
 // }
+
+
 LikePost(index: number){
   const post = this.listofposts[index];
   const currentUser = this.authService.getCurrentUser();
-  if (currentUser && post.likedByUsers && post.likedByUsers.includes(currentUser.uid)) {
-    console.log("You've already liked this post.");
-    return;
-  }
-  post.numberOfLikes++;
   if (currentUser) {
     post.likedByUsers = post.likedByUsers || [];
-    post.likedByUsers.push(currentUser.uid);
+    if (post.likedByUsers.includes(currentUser.uid)) {
+      // If the user has already liked the post, unlike it
+      const userIndex = post.likedByUsers.indexOf(currentUser.uid);
+      post.likedByUsers.splice(userIndex, 1);
+      post.numberOfLikes--;
+      console.log("You've unliked this post.");
+    } else {
+      // If the user hasn't liked the post, like it
+      post.likedByUsers.push(currentUser.uid);
+      post.numberOfLikes++;
+      console.log("You've liked this post.");
+    }
+    this.listChangeEvent.emit(this.listofposts);
+    this.saveData();
   }
-  this.listChangeEvent.emit(this.listofposts);
-  this.saveData();
 }
+// LikePost(index: number){
+//   const post = this.listofposts[index];
+//   const currentUser = this.authService.getCurrentUser();
+//   if (currentUser && post.likedByUsers && post.likedByUsers.includes(currentUser.uid)) {
+//     console.log("You've already liked this post.");
+//     return;
+//   }
+//   post.numberOfLikes++;
+//   if (currentUser) {
+//     post.likedByUsers = post.likedByUsers || [];
+//     post.likedByUsers.push(currentUser.uid);
+//   }
+//   this.listChangeEvent.emit(this.listofposts);
+//   this.saveData();
+// }
 
 deleteComment(postIndex: number, commentIndex: number): void {
   if (this.listofposts && this.listofposts[postIndex] && this.listofposts[postIndex].comments) {

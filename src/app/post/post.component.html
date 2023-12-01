@@ -59,8 +59,10 @@
       <button (click)="onClick()" class="bi bi-heart btn btn-danger">
         {{post?.numberOfLikes}}
       </button>
-      <button class="btn btn-primary" (click)="onEdit()">Edit</button>
-      <button class="btn btn-danger" (click)="delete()">Delete</button>
+      <!-- <button class="btn btn-primary" (click)="onEdit()">Edit</button> -->
+      <button *ngIf="post?.userId === currentUser?.uid" class="btn btn-primary" (click)="onEdit()">Edit</button>
+      <!-- <button class="btn btn-danger" (click)="delete()">Delete</button> -->
+      <button *ngIf="post?.userId === currentUser?.uid" class="btn btn-danger" (click)="delete()">Delete</button>
     </div>
   
     <div class="comment-section">
@@ -84,6 +86,7 @@
       <!-- Comment Actions -->
       <div class="comment-actions">
         <button class="bi bi-heart btn btn-danger" (click)="likeComment(index, i)"><span *ngIf="comment?.likes" class="likes-count">{{ comment.likes }}</span></button>
+        <!-- <button class="bi bi-heart btn btn-danger" (click)="likeComment(i)"><span *ngIf="comment?.likes" class="likes-count">{{ comment.likes }}</span></button> -->
 
         <button class="btn btn-danger" (click)="deleteComment(i)">Delete</button>
         <button class="btn btn-primary" (click)="setParentCommentIndex(i)">Reply</button>
