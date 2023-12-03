@@ -115,13 +115,48 @@ deleteComment(commentIndex: number) {
 //   }
 // }
 
+
+// addComment(index: number, commentText: string, parentCommentIndex?: number) {
+//   const currentUser = this.authService.getCurrentUser();
+//   if (currentUser && commentText) {
+//     const newComment: Comment = { text: commentText, commentReplies: [], likes: 0, replies: [], userId: currentUser.uid };
+//     if (currentUser.photoURL) {
+//       newComment.userImage = currentUser.photoURL;
+//       console.log('User image URL:', currentUser.photoURL); // Add this line
+//     }
+//     this.postService.addComment(index, newComment, parentCommentIndex);
+//     this.comment = ''; // Reset the comment input
+//     this.replyingTo = null; // Reset replyingTo after replying
+//   }
+// }
+
+
+// addComment(index: number, commentText: string, parentCommentIndex?: number) {
+//   const currentUser = this.authService.getCurrentUser();
+//   if (currentUser && commentText) {
+//     const newComment: Comment = {
+//       text: commentText,
+//       commentReplies: [],
+//       likes: 0,
+//       replies: [],
+//       userId: currentUser.uid,
+//       userImageUrl: this.post?.imgPath // Set the user's image URL
+//     };
+//     this.postService.addComment(index, newComment, parentCommentIndex);
+//     this.comment = ''; // Reset the comment input
+//     this.replyingTo = null; // Reset replyingTo after replying
+//   }
+// }
+
+
+
 addComment(index: number, commentText: string, parentCommentIndex?: number) {
   const currentUser = this.authService.getCurrentUser();
   if (currentUser && commentText) {
     const newComment: Comment = { text: commentText, commentReplies: [], likes: 0, replies: [], userId: currentUser.uid };
     this.postService.addComment(index, newComment, parentCommentIndex);
-    this.comment = ''; // Reset the comment input
-    this.replyingTo = null; // Reset replyingTo after replying
+    this.comment = ''; 
+    this.replyingTo = null;
   }
 }
 

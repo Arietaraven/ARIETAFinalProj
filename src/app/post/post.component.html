@@ -75,6 +75,14 @@
   
     <div *ngFor="let comment of post?.comments; let i = index" class="comment-container">
       <p *ngIf="comment?.text" class="comment-text">{{ comment.text }}</p>
+      <!-- <div *ngFor="let comment of post?.comments; let i = index" class="comment-container">
+        <img *ngIf="comment.userImageUrl" [src]="comment.userImageUrl" alt="User Image" class="user-image">
+        <p *ngIf="comment?.text" class="comment-text">{{ comment.text }}</p> -->
+        <!-- ... rest of your comment template ... -->
+      
+      
+      
+      
   
       <!-- Replies -->
       <div *ngFor="let reply of comment.commentReplies; let replyIndex = index" class="reply-container">

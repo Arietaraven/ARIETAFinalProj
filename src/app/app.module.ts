@@ -17,6 +17,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { SignInComponent } from './sign-in/sign-in.component';
 import { SignUpComponent } from './sign-up/sign-up.component';
+import { NotificationComponent } from './notification/notification.component';
 
 
 
@@ -39,7 +40,8 @@ const routes : Routes = [
     PostComponent,
     AuthComponent,
     SignInComponent,
-    SignUpComponent
+    SignUpComponent,
+    NotificationComponent
   ],
   imports: [
     FormsModule,

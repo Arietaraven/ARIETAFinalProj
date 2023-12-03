@@ -23,6 +23,17 @@
         <button class="btn btn-outline-success" type="submit" (click)= "onsave()">Save </button> -->
         <button class="btn btn-outline-success" type="submit" *ngIf="!authService.isLoggedIn()" routerLink="/sign-in">log in </button>
         <button class="btn btn-outline-success" type="submit" *ngIf="!authService.isLoggedIn()" routerLink="/sign-up">sign up </button>
+        <div class="notification-icon">
+          <button (click)="toggleNotifications()">
+            <i class="fa fa-bell"></i>
+            <span *ngIf="notifications.length > 0" class="notification-count">{{ notifications.length }}</span>
+          </button>
+          <div *ngIf="showNotifications" class="notification-dropdown">
+            <a *ngFor="let notification of notifications" [routerLink]="['/post', notification.postId]" (click)="markAsRead(notification)">
+              {{ notification.message }}
+            </a>
+          </div>
+        </div>
         <button class="btn btn-outline-success" type="submit"(click)="onLogout()">Logout</button>
       </form>
     </div>

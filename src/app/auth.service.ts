@@ -5,6 +5,8 @@ import { User, UserInfo  } from 'firebase/auth';
 import { map } from 'rxjs/operators';
 import { BehaviorSubject } from 'rxjs';
 import { getAuth } from "firebase/auth";
+import { AngularFireDatabase } from '@angular/fire/compat/database';
+import { FirebaseNotification } from './post.model';
 
 
 
@@ -21,7 +23,7 @@ export class AuthService {
 
 
 
-  constructor(private firebaseAuth: AngularFireAuth) { 
+  constructor(private firebaseAuth: AngularFireAuth, private db: AngularFireDatabase) { 
     this.firebaseAuth.authState.pipe(
       map(user => user ? { ...user, providerData: user.providerData.filter(pd => pd !== null) as UserInfo[] } : null)
     ).subscribe(user => this._user$.next(user));
@@ -71,6 +73,10 @@ export class AuthService {
   isLoggedIn(): boolean {
     const auth = getAuth();
     return auth.currentUser !== null;
+  }
+  getUsers(): Observable<FirebaseNotification[]> {
+    // Retrieve the list of users from the database
+    return this.db.list<FirebaseNotification>('users').valueChanges();
   }
 }
 

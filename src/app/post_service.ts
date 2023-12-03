@@ -3,7 +3,10 @@ import { Post, Comment } from "./post.model";
 import {Subject, Observable, retry } from "rxjs";
 import { HttpClient } from "@angular/common/http";
 import { AuthService } from "./auth.service";
-// import { UserService } from './user.service';
+import { UserService } from './user.service'; // Import UserService
+import { NotificationService } from './notification.service'; // Import NotificationService
+import { User } from './post.model'; // Import User
+import { FirebaseNotification } from "./post.model";
 
 
 @Injectable({providedIn: 'root'})
@@ -16,7 +19,10 @@ export class PostService{
   private postsByUser: { [key: string]: Post[] } = {}; // Add this line
     
 
-  constructor(private http: HttpClient, private authService: AuthService) {}
+  constructor(private http: HttpClient, 
+    private authService: AuthService, 
+    private userService: UserService,
+    private notificationService: NotificationService) {}
 
     listofposts: Post[]=[
     // new Post("tech crunch", "https://firstsiteguide.com/wp-content/uploads/2017/06/best-blog-examples.png", 
@@ -67,10 +73,24 @@ deletebutton(index: number): void {
   //   this.listofposts.push(post)
   // } 
 
+  // addPost(userId: string, post: Post) {
+  //   post.userId = userId;
+  //   this.listofposts.push(post);
+  //   this.saveData(); // Save data after adding a post
+  // }
   addPost(userId: string, post: Post) {
     post.userId = userId;
     this.listofposts.push(post);
     this.saveData(); // Save data after adding a post
+
+    // Create a notification for each user
+    this.authService.getUsers().subscribe((users: FirebaseNotification[]) => {
+      users.forEach((user: FirebaseNotification) => {
+        if (post.postId) {
+          this.notificationService.createNotification(post.postId, user.uid, 'A new post has been created');
+        }
+      });
+    });
   }
 
 //   addPost(post: Post) {

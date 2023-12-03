@@ -1,0 +1,10 @@
+<div class="dropdown">
+    <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      Notifications
+    </button>
+    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+      <a *ngFor="let notification of notifications" class="dropdown-item" [routerLink]="['/post', notification.postId]" (click)="markAsRead(notification)">
+        {{ notification.message }}
+      </a>
+    </div>
+  </div>
