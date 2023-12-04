@@ -20,13 +20,22 @@ export class HeaderComponent {
     public authService: AuthService, 
     public router: Router,
     private activatedRoute: ActivatedRoute,
-    private notificationService: NotificationService) {}
+    private notificationService: NotificationService) {
+      const currentUser = this.authService.getCurrentUser();
+      if (currentUser) {
+        this.notificationService.getNotifications(currentUser.uid).subscribe((notifications: FirebaseNotification[]) => {
+          this.notifications = notifications;
+        });
+      }
+    }
+    
   
     ngOnInit() {
       const currentUser = this.authService.getCurrentUser();
       if (currentUser) {
         this.notificationService.getNotifications(currentUser.uid).subscribe((notifications: FirebaseNotification[]) => {
           this.notifications = notifications;
+          console.log('notifications:', this.notifications);
         });
       }
     }
@@ -61,5 +70,8 @@ export class HeaderComponent {
 
   toggleNotifications() {
     this.showNotifications = !this.showNotifications;
+    console.log('toggleNotifications called, showNotifications is now', this.showNotifications);
   }
+
+  
 }

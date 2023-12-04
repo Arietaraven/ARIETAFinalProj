@@ -18,6 +18,11 @@ import { HttpClientModule } from '@angular/common/http';
 import { SignInComponent } from './sign-in/sign-in.component';
 import { SignUpComponent } from './sign-up/sign-up.component';
 import { NotificationComponent } from './notification/notification.component';
+import { PostService } from './post_service';
+import { BackEndService } from './back-end.service';
+import { UserService } from './user.service';
+import { NotificationService } from './notification.service';
+import { AuthService } from './auth.service';
 
 
 
@@ -54,7 +59,7 @@ const routes : Routes = [
     HttpClientModule,
 
   ],
-  providers: [],
+  providers: [PostService, BackEndService, AuthService, UserService, NotificationService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

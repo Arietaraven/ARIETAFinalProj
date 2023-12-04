@@ -16,6 +16,7 @@ import { retry } from 'rxjs/operators';
 export class PostListComponent implements OnInit{
   index=0
 listofposts: Post[]=[];
+searchTerm: string = '';
 constructor(
   private postService: PostService,
   private backEndService :BackEndService,
@@ -41,6 +42,16 @@ this.backEndService.fetchData().subscribe((posts: Post[]) => {
   this.listofposts = posts;
   this.postService.setPost(posts); // assuming setPost method exists in your PostService
 });
+}
+get filteredPosts(): Post[] {
+  const filteredPosts = this.listofposts.filter((post) =>
+  post.title.toLowerCase().includes(this.searchTerm.toLowerCase())
+  );
+  console.log(filteredPosts);
+  return filteredPosts;
+}
+logSearchTerm() {
+  console.log(this.searchTerm);
 }
 
 }
