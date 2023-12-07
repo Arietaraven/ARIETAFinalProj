@@ -1,4 +1,4 @@
-<div class="dropdown">
+<!-- <div class="dropdown">
     <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
       Notifications
     </button>
@@ -7,4 +7,44 @@
         {{ notification.message }}
       </a>
     </div>
+  </div> -->
+
+<!-- 
+  <p>Displayed notifications: {{ notifications | json }}</p> -->
+
+  <!-- <div class="dropdown"  (mouseover)="logNotifications()">
+    <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      Notifications
+    </button>
+    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+      <a *ngFor="let notification of notifications" class="dropdown-item" [routerLink]="['/post', notification.postId]" (click)="markAsRead(notification)">
+        {{ notification.message }}
+      </a>
+    </div>
+  </div> -->
+  <!-- <div class="dropdown">
+    <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" (click)="toggleNotifications()">
+      <i class="fas fa-bell"></i>
+      <span *ngIf="notifications.length > 0" class="notification-count">{{ notifications.length }}</span>
+    </button>
+    <div class="dropdown-menu" [hidden]="!showNotifications">
+      <a *ngFor="let notification of notifications" class="dropdown-item" [routerLink]="['/post', notification.postId]" (click)="markAsRead(notification)">
+        {{ notification.message }}
+      </a>
+    </div>
+  </div> -->
+  <div class="dropdown" [class.show]="showNotifications">
+    <button class="btn btn-primary dropdown-toggle" type="button" (click)="toggleNotifications()">
+      <i class="fas fa-bell"></i>
+      <span *ngIf="notifications.length > 0" class="notification-count">{{ notifications.length }}</span>
+    </button>
+    <div class="dropdown-menu" [class.show]="showNotifications">
+      <!-- <a *ngFor="let notification of notifications" class="dropdown-item" [routerLink]="['/post', notification.postId]" (click)="markAsRead(notification)">
+        {{ notification.message }}
+      </a> -->
+      <div *ngFor="let notification of notifications">
+        <a [routerLink]="['/post', notification.postId]">{{ notification.message }}</a>
+      </div>
+    </div>
   </div>
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>

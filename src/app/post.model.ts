@@ -10,7 +10,7 @@ export class Post{
         public comments: Comment[] = [],
         public userId?: string,
         public likedByUsers?: string[],
-        public postId?: string
+        public postId?: string,
         ){
 
         }

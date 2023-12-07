@@ -80,9 +80,10 @@ deletebutton(index: number): void {
   // }
   addPost(userId: string, post: Post) {
     post.userId = userId;
+    post.postId = this.generateId(); // Add this line
     this.listofposts.push(post);
     this.saveData(); // Save data after adding a post
-
+  
     // Create a notification for each user
     this.authService.getUsers().subscribe((users: FirebaseNotification[]) => {
       users.forEach((user: FirebaseNotification) => {
@@ -92,7 +93,6 @@ deletebutton(index: number): void {
       });
     });
   }
-
 //   addPost(post: Post) {
 //     this.authService.user$.subscribe(user => {
 //         if (user) {
@@ -172,6 +172,29 @@ deletebutton(index: number): void {
 // }
 
 
+// LikePost(index: number){
+//   const post = this.listofposts[index];
+//   const currentUser = this.authService.getCurrentUser();
+//   if (currentUser) {
+//     post.likedByUsers = post.likedByUsers || [];
+//     if (post.likedByUsers.includes(currentUser.uid)) {
+//       // If the user has already liked the post, unlike it
+//       const userIndex = post.likedByUsers.indexOf(currentUser.uid);
+//       post.likedByUsers.splice(userIndex, 1);
+//       post.numberOfLikes--;
+//       console.log("You've unliked this post.");
+//     } else {
+//       // If the user hasn't liked the post, like it
+//       post.likedByUsers.push(currentUser.uid);
+//       post.numberOfLikes++;
+//       console.log("You've liked this post.");
+//     }
+//     this.listChangeEvent.emit(this.listofposts);
+//     this.saveData();
+//   }
+// }
+
+
 LikePost(index: number){
   const post = this.listofposts[index];
   const currentUser = this.authService.getCurrentUser();
@@ -188,6 +211,11 @@ LikePost(index: number){
       post.likedByUsers.push(currentUser.uid);
       post.numberOfLikes++;
       console.log("You've liked this post.");
+
+      // Create a notification for the post's author
+      if (post.userId !== currentUser.uid && post.postId && post.userId) {
+        this.notificationService.createNotification(post.postId, post.userId, 'Someone liked your post');
+      }
     }
     this.listChangeEvent.emit(this.listofposts);
     this.saveData();
@@ -256,20 +284,139 @@ deleteReply(postIndex: number, commentIndex: number, replyIndex: number): void {
 //   }
 // }
 
+
+
+// addComment(index: number, comment: Comment, parentCommentIndex?: number) {
+//   const post = this.listofposts[index];
+
+//   if (post && post.comments) {
+//     if (parentCommentIndex !== undefined) {
+//       if (!post.comments[parentCommentIndex].commentReplies) {
+//         post.comments[parentCommentIndex].commentReplies = [];
+//       }
+//       post.comments[parentCommentIndex].commentReplies.push(comment);
+//     } else {
+//       post.comments.push(comment);
+//     }
+
+//     this.listChangeEvent.emit(this.listofposts);
+//     this.saveData();
+
+//     // Create a notification for the post's author
+//     const currentUser = this.authService.getCurrentUser();
+
+//     if (currentUser && post.userId !== currentUser.uid && post.postId && post.userId) {
+//       // Use postId safely, checking for undefined
+//       if (post.postId !== undefined) {
+//         const notification = new FirebaseNotification(
+//           this.generateId(),
+//           post.postId,
+//           post.userId,
+//           currentUser.uid,
+//           'Someone commented on your post',
+//           false,
+//           new Date()
+//         );
+//         this.notificationService.createNotification(notification.postId, notification.userId, notification.message);
+//       } else {
+//         console.error("post.postId is undefined");
+//       }
+//     }
+//   }
+// }
 addComment(index: number, comment: Comment, parentCommentIndex?: number) {
-  if (this.listofposts[index] && this.listofposts[index].comments) {
+  const post = this.listofposts[index];
+
+  if (post && post.comments) {
     if (parentCommentIndex !== undefined) {
-      if (!this.listofposts[index].comments[parentCommentIndex].commentReplies) {
-        this.listofposts[index].comments[parentCommentIndex].commentReplies = [];
+      if (!post.comments[parentCommentIndex].commentReplies) {
+        post.comments[parentCommentIndex].commentReplies = [];
       }
-      this.listofposts[index].comments[parentCommentIndex].commentReplies.push(comment);
+      post.comments[parentCommentIndex].commentReplies.push(comment);
     } else {
-      this.listofposts[index].comments.push(comment);
+      post.comments.push(comment);
     }
+
     this.listChangeEvent.emit(this.listofposts);
     this.saveData();
+
+    // Create a notification for the post's author
+    const currentUser = this.authService.getCurrentUser();
+
+    console.log('currentUser:', currentUser);
+    console.log('post.userId:', post.userId);
+    console.log('post.postId:', post.postId);
+
+    if (currentUser && post.userId !== currentUser.uid && post.postId && post.userId) {
+      console.log('postId:', post.postId);
+      if (post.postId !== undefined) {
+        const notification = new FirebaseNotification(
+          this.generateId(),
+          post.postId,
+          post.userId,
+          currentUser.uid,
+          'Someone commented on your post',
+          false,
+          new Date()
+        );
+        this.notificationService.createNotification(notification.postId, notification.userId, notification.message);
+      } else {
+        console.error("post.postId is undefined");
+      }
+    }
   }
 }
+
+
+// addComment(index: number, comment: Comment, parentCommentIndex?: number) {
+//   const post = this.listofposts[index];
+//   if (post && post.comments) {
+//     if (parentCommentIndex !== undefined) {
+//       if (!post.comments[parentCommentIndex].commentReplies) {
+//         post.comments[parentCommentIndex].commentReplies = [];
+//       }
+//       post.comments[parentCommentIndex].commentReplies.push(comment);
+//     } else {
+//       post.comments.push(comment);
+//     }
+//     this.listChangeEvent.emit(this.listofposts);
+//     this.saveData();
+
+//     // Create a notification for the post's author
+//     const currentUser = this.authService.getCurrentUser();
+//     if (currentUser && post.userId !== currentUser.uid && post.postId && post.userId) {
+//       this.notificationService.createNotification(post.postId, post.userId, 'Someone commented on your post');
+//   }
+//   const notification = new FirebaseNotification(
+//     this.generateId(),
+//     post.postId,
+//     post.userId,
+//     currentUser.uid,
+//     'Someone commented on your post',
+//     false,
+//     new Date()
+//   );
+//   this.notificationService.addNotification(notification);
+// }
+// }
+
+generateId(): string {
+  return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+}
+// addComment(index: number, comment: Comment, parentCommentIndex?: number) {
+//   if (this.listofposts[index] && this.listofposts[index].comments) {
+//     if (parentCommentIndex !== undefined) {
+//       if (!this.listofposts[index].comments[parentCommentIndex].commentReplies) {
+//         this.listofposts[index].comments[parentCommentIndex].commentReplies = [];
+//       }
+//       this.listofposts[index].comments[parentCommentIndex].commentReplies.push(comment);
+//     } else {
+//       this.listofposts[index].comments.push(comment);
+//     }
+//     this.listChangeEvent.emit(this.listofposts);
+//     this.saveData();
+//   }
+// }
 // likeComment(postIndex: number, commentIndex: number): void {
 //   if (this.listofposts && this.listofposts[postIndex] && this.listofposts[postIndex].comments) {
 //     const comment = this.listofposts[postIndex].comments[commentIndex];
@@ -281,6 +428,55 @@ addComment(index: number, comment: Comment, parentCommentIndex?: number) {
 //   }
 // }
 
+// likeComment(postIndex: number, commentIndex: number): void {
+//   const post = this.listofposts[postIndex];
+//   const comment = post.comments[commentIndex];
+//   const currentUser = this.authService.getCurrentUser();
+//   if (currentUser) {
+//     comment.likedByUsers = comment.likedByUsers || [];
+//     if (comment.likedByUsers.includes(currentUser.uid)) {
+//       // If the user has already liked the comment, unlike it
+//       const userIndex = comment.likedByUsers.indexOf(currentUser.uid);
+//       comment.likedByUsers.splice(userIndex, 1);
+//       comment.likes--;
+//       console.log("You've unliked this comment.");
+//     } else {
+//       // If the user hasn't liked the comment, like it
+//       comment.likedByUsers.push(currentUser.uid);
+//       comment.likes++;
+//       console.log("You've liked this comment.");
+//     }
+//     this.listChangeEvent.emit(this.listofposts);
+//     this.saveData();
+//   }
+// }
+// likeComment(postIndex: number, commentIndex: number): void {
+//   const post = this.listofposts[postIndex];
+//   const comment = post.comments[commentIndex];
+//   const currentUser = this.authService.getCurrentUser();
+//   if (currentUser) {
+//     comment.likedByUsers = comment.likedByUsers || [];
+//     if (comment.likedByUsers.includes(currentUser.uid)) {
+//       // If the user has already liked the comment, unlike it
+//       const userIndex = comment.likedByUsers.indexOf(currentUser.uid);
+//       comment.likedByUsers.splice(userIndex, 1);
+//       comment.likes--;
+//       console.log("You've unliked this comment.");
+//     } else {
+//       // If the user hasn't liked the comment, like it
+//       comment.likedByUsers.push(currentUser.uid);
+//       comment.likes++;
+//       console.log("You've liked this comment.");
+
+//       // Create a notification for the post's author
+//       if (post.userId !== currentUser.uid && post.postId && post.userId) {
+//         this.notificationService.createNotification(post.postId, post.userId, 'Someone liked a comment on your post');
+//       }
+//     }
+//     this.listChangeEvent.emit(this.listofposts);
+//     this.saveData();
+//   }
+// }
 likeComment(postIndex: number, commentIndex: number): void {
   const post = this.listofposts[postIndex];
   const comment = post.comments[commentIndex];
@@ -298,6 +494,11 @@ likeComment(postIndex: number, commentIndex: number): void {
       comment.likedByUsers.push(currentUser.uid);
       comment.likes++;
       console.log("You've liked this comment.");
+
+      // Create a notification for the post's author
+      if (post.userId !== currentUser.uid && post.postId && post.userId) {
+        this.notificationService.createNotification(post.postId, post.userId, 'Someone liked a comment on your post');
+      }
     }
     this.listChangeEvent.emit(this.listofposts);
     this.saveData();

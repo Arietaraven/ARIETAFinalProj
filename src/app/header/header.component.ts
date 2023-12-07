@@ -4,6 +4,7 @@ import { AuthService } from '../auth.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FirebaseNotification } from '../post.model';
 import { NotificationService } from '../notification.service';
+import { NotificationComponent } from '../notification/notification.component';
 
 
 @Component({
@@ -35,7 +36,6 @@ export class HeaderComponent {
       if (currentUser) {
         this.notificationService.getNotifications(currentUser.uid).subscribe((notifications: FirebaseNotification[]) => {
           this.notifications = notifications;
-          console.log('notifications:', this.notifications);
         });
       }
     }
@@ -67,6 +67,7 @@ export class HeaderComponent {
   markAsRead(notification: FirebaseNotification) {
     this.notificationService.markAsRead(notification.id);
   }
+  
 
   toggleNotifications() {
     this.showNotifications = !this.showNotifications;

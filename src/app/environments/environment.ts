@@ -1,3 +1,6 @@
+import { initializeApp } from "firebase/app";
+
+
 export const environment = {
     production: false,
     apiKey: "AIzaSyDPJykKMp8q3rVVV_EPRzcyVPYm-2wfuTg",
@@ -9,3 +12,5 @@ export const environment = {
     appId: "1:26161627429:web:fff6ddd83141c85080dacc",
     measurementId: "G-F9KBH1LMGD"
   };
+
+  initializeApp(environment);

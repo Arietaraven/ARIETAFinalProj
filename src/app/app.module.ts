@@ -32,8 +32,10 @@ const routes : Routes = [
   {path: 'post-add' , component: PostEditComponent},
   {path: 'authentication', component: AuthComponent},
   {path: 'post-edit/:index', component: PostEditComponent},
+  {path: 'post/:id', component: PostComponent},
   {path: 'sign-in', component: SignInComponent},
   {path: 'sign-up', component: SignUpComponent},
+  {path: 'notification', component: NotificationComponent}
 ]
 
 @NgModule({
