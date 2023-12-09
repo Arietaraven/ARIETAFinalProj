@@ -48,8 +48,14 @@ export class PostService{
   //   return this.listofposts;
   // }
 
-  getPost(userId: string){
+  getPost(userId: string) {
     return this.listofposts.filter(post => post.userId === userId);
+}
+// getPostById(postId: string): Observable<Post> {
+//   return this.http.get<Post>(`https://crud-b-8f2ce-default-rtdb.firebaseio.com/post/${postId}.json`);
+// }
+getAllPosts(): Observable<Post[]> {
+  return this.http.get<Post[]>('https://crud-b-8f2ce-default-rtdb.firebaseio.com/post.json');
 }
 //   getPost(userId: string): Post[] {
 //     return this.postsByUser[userId] || [];

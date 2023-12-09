@@ -42,9 +42,15 @@
       <!-- <a *ngFor="let notification of notifications" class="dropdown-item" [routerLink]="['/post', notification.postId]" (click)="markAsRead(notification)">
         {{ notification.message }}
       </a> -->
-      <div *ngFor="let notification of notifications">
-        <a [routerLink]="['/post', notification.postId]">{{ notification.message }}</a>
-      </div>
+      <!-- <div *ngFor="let notification of notifications"> -->
+        <!-- <a [routerLink]="['/post', notification.postId]">{{ notification.message }}</a> -->
+        <a *ngFor="let notification of notifications" 
+          class="dropdown-item" 
+          [routerLink]="['/post', notification.postId]" 
+          (click)="markAsRead(notification)">
+          {{ notification.message }}
+        </a>
+      <!-- </div> -->
     </div>
   </div>
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>

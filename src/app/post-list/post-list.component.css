@@ -1,0 +1,17 @@
+/* Change the background color and border radius of the search bar */
+.input-group .form-control {
+    background-color: #f8f9fa; /* Light gray */
+    border-radius: 20px;
+  }
+  
+  /* Change the background color, border color, and border radius of the search button */
+  .input-group .btn-outline-primary {
+    background-color: #007bff; /* Blue */
+    border-color: #007bff; /* Blue */
+    border-radius: 20px;
+  }
+  
+  /* Change the color of the search icon */
+  .input-group .bi-search {
+    fill: #ffffff; /* White */
+  }

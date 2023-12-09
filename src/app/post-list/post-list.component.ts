@@ -62,6 +62,7 @@ ngOnInit(): void {
     this.listofposts = posts;
     this.postService.setPost(posts); 
   });
+  console.log(this.listofposts);
 }
 // ngOnInit(): void {
 //   const currentUser = this.authService.getCurrentUser();
@@ -89,6 +90,13 @@ get filteredPosts(): Post[] {
   console.log(filteredPosts);
   return filteredPosts;
 }
+// get filteredPosts(): Post[] {
+//   if (this.searchTerm) {
+//     return this.listofposts.filter(post => post.title.toLowerCase().includes(this.searchTerm.toLowerCase()));
+//   } else {
+//     return this.listofposts;
+//   }
+// }
 logSearchTerm() {
   console.log(this.searchTerm);
 }

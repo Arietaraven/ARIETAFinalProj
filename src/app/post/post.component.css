@@ -151,3 +151,9 @@ body {
   border: 2px solid #ccc;
   margin-right: 10px;
 }
+/* Align the comment actions horizontally */
+.facebook-post .comment-container .comment-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Adjust as needed */
+}

@@ -3,6 +3,7 @@ import { Post, Comment, User } from '../post.model';
 import { PostService } from '../post_service';
 import { Router } from '@angular/router';
 import { AuthService } from '../auth.service';
+import { ActivatedRoute } from '@angular/router';
 
 
 
@@ -29,7 +30,8 @@ export class PostComponent implements OnInit{
 
   constructor(private postService: PostService, 
     private router: Router,
-    private authService: AuthService) {
+    private authService: AuthService,
+    private route: ActivatedRoute) {
     this.replyComment = '';
   }
     @Input() index: number = 0;
@@ -38,8 +40,62 @@ export class PostComponent implements OnInit{
 
     currentUser: any;
 
+    // ngOnInit(): void {
+    //   this.currentUser = this.authService.getCurrentUser();
+    // }
+    // ngOnInit(): void {
+    //   this.currentUser = this.authService.getCurrentUser();
+    //   console.log(this.post);
+    //   console.log(this.post?.imgPath); // This will print the image URL to the console
+    //   console.log(this.currentUser); // This will print the current user to the console
+    //   console.log(this.post?.comments); // This will print the comments to the console
+    
+    //   this.authService.user$.subscribe(user => {
+    //     if (user) {
+    //       console.log('User is authenticated');
+    //     } else {
+    //       console.log('User is not authenticated');
+    //     }
+    //   });
+    // }
     ngOnInit(): void {
       this.currentUser = this.authService.getCurrentUser();
+      console.log(this.post);
+      console.log(this.post?.imgPath); // This will print the image URL to the console
+      console.log(this.currentUser); // This will print the current user to the console
+      console.log(this.post?.comments); // This will print the comments to the console
+    
+      this.authService.user$.subscribe(user => {
+        if (user) {
+          console.log('User is authenticated');
+        } else {
+          console.log('User is not authenticated');
+        }
+      });
+    
+
+      const postId = this.route.snapshot.paramMap.get('id');
+      console.log('postId:', postId);
+      if (postId) {
+        this.postService.getAllPosts().subscribe(posts => {
+          const post = posts.find(p => p.postId === postId);
+          if (post) {
+            console.log('Fetched post data:', post); // Check the fetched post data
+            this.post = post;
+          } else {
+            console.error('Post not found!');
+          }
+        }, error => {
+          console.error('Error fetching posts:', error); // Log any errors
+        });
+      }
+      // const postId = this.route.snapshot.paramMap.get('id');
+      // if (postId) {
+      //   this.postService.getPostById(postId).subscribe(post => {
+      //     console.log('Fetched post data:', post);
+      //     this.post = post;
+      //   });
+      // }
     }
   // ngOnInit(): void {
   //   console.log(this.post);

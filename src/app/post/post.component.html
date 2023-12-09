@@ -1,47 +1,3 @@
-<!-- <h1>{{post?.title}}</h1>
-<img src="{{post?.imgPath}}"/>
-<p>{{post?.description}}</p>
-
-<p>{{post?.author}}</p>
-<P>{{post?.dateCreated}}</P>
-<p>
-    <button (click)="onClick()" class="bi bi-heart btn btn-danger" >
-    {{post?.numberOfLikes}}</button> |
-<button class="btn btn-primary" (click)="onEdit()">Edit</button> | 
-<button class="btn btn-danger" (click)="delete()">Delete</button>
-</p>
-
-
-<div class="comment-section">
-    <input type="text" [(ngModel)]="comment" placeholder="add a comment">
-    <button class="btn btn-primary" (click)="addComment(index, comment)">Add Comment</button>
-  </div><br>
-
-
-        <div *ngFor="let comment of post?.comments; let i = index">
-    <p *ngIf="comment?.text">{{ comment.text }}</p>
-    <div *ngFor="let reply of comment.commentReplies; let replyIndex = index">
-        <p *ngIf="reply?.text">
-            {{ reply.text }}
-            <button class="bi bi-heart btn btn-danger" (click)="likeReply(index, i, replyIndex)"></button> |
-            <span *ngIf="reply?.likes">{{ reply.likes }}</span>
-            <button class="btn btn-danger" (click)="deleteReply(index, i, replyIndex)">Delete</button>
-        </p>
-    </div>
-
-    <div class="button-container">
-        <button class="bi bi-heart btn btn-danger" (click)="likeComment(index, i)"></button> |
-        <span *ngIf="comment?.likes">{{ comment.likes }}</span>
-        <button class="btn btn-danger" (click)="deleteComment(commentIndex)">Delete</button> |
-        <button class="btn btn-primary" (click)="setParentCommentIndex(i)">Reply</button>
-    </div>
-
-    <div *ngIf="replyingTo === i">
-        <input type="text" [(ngModel)]="replyComment" placeholder="add a reply">
-        <button class="btn btn-primary" (click)="addComment(index, replyComment, replyingTo)">Submit Reply</button>
-    </div>
-</div> -->
-
 
 <!-- Add this HTML structure within your Angular component template where you display the post -->
 
@@ -68,12 +24,17 @@
       <button *ngIf="post?.userId === currentUser?.uid" class="btn btn-danger" (click)="delete()">Delete</button>
     </div>
   
+    <!-- <div class="comment-section">
+      <input type="text" [(ngModel)]="comment" placeholder="Add a comment" />
+      <button class="btn btn-primary" (click)="addComment(index, comment)">Add Comment</button>
+    </div> -->
     <div class="comment-section">
       <input type="text" [(ngModel)]="comment" placeholder="Add a comment" />
       <button class="btn btn-primary" (click)="addComment(index, comment)">Add Comment</button>
     </div>
   
-    <div *ngFor="let comment of post?.comments; let i = index" class="comment-container">
+    <!-- <div *ngFor="let comment of post?.comments; let i = index" class="comment-container"> -->
+        <div *ngFor="let comment of post?.comments; let i = index" class="comment-container">
       <p *ngIf="comment?.text" class="comment-text">{{ comment.text }}</p>
       <!-- <div *ngFor="let comment of post?.comments; let i = index" class="comment-container">
         <img *ngIf="comment.userImageUrl" [src]="comment.userImageUrl" alt="User Image" class="user-image">

@@ -1,0 +1,12 @@
+.notification-button {
+    margin-right: 10rem; /* Adjust as needed */
+  }
+  /* Change the color of the icons */
+.nav-item .fas {
+    color: #007bff; /* Blue */
+  }
+  
+  /* Change the background color of the navbar */
+  .navbar {
+    background-color: #007bff; /* Blue */
+  }

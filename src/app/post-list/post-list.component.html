@@ -1,4 +1,4 @@
-<!-- <app-post [post]="listofposts[0]"></app-post>
+<!-- <app-post [post]="listofposts[0]"></app-post> -->
 <div class="input-group">
   <input
     type="search"
@@ -25,14 +25,18 @@
       />
     </svg>
   </button>
-</div> -->
+</div> 
+
+
 <!-- <ng-container *ngFor="let post of listofposts; let i = index"> -->
-    <app-post  *ngFor="let post of listofposts; let i = index" [post]="post" [index]='i'></app-post>
+    <app-post  *ngFor="let post of filteredPosts; let i = index" [post]="post" [index]='i'></app-post>
  <!-- </ng-container> -->
 
   
   <!-- <app-post
     *ngFor="let post of filteredPosts; let i = index"
     [post]="post"
-    [index]="i"
+    [index]="i">
   </app-post> -->
+
+  <!-- <app-post *ngFor="let post of filteredPosts; let i = index" [post]="post" [index]="i"></app-post> -->
