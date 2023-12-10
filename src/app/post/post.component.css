@@ -157,3 +157,43 @@ body {
   align-items: center;
   gap: 10px; /* Adjust as needed */
 }
+
+.comment-container {
+  display: flex;
+  align-items: center;
+  justify-content:left;
+  margin-bottom: 10px; /* Adjust as needed */
+}
+
+.comment-content {
+  display: flex;
+  align-items: center;
+}
+
+.comment-text {
+  margin-right: 10px; /* Adjust as needed */
+}
+/* Remove the background color and border of the buttons */
+.comment-actions button {
+  background-color: transparent;
+  border: none;
+  color: #007bff; /* Blue text color */
+}
+/* Remove the background color and border of the buttons */
+.post-actions button {
+  background-color: transparent;
+  border: none;
+  color: #007bff; /* Blue text color */
+}
+
+.reply-actions button {
+  background-color: transparent;
+  border: none;
+  color: #007bff; /* Blue text color */
+}
+/* Remove the background color and border of the buttons */
+.reply-text button {
+  background-color: transparent;
+  border: none;
+  color: #007bff; /* Blue text color */
+}

@@ -40,24 +40,7 @@ export class PostComponent implements OnInit{
 
     currentUser: any;
 
-    // ngOnInit(): void {
-    //   this.currentUser = this.authService.getCurrentUser();
-    // }
-    // ngOnInit(): void {
-    //   this.currentUser = this.authService.getCurrentUser();
-    //   console.log(this.post);
-    //   console.log(this.post?.imgPath); // This will print the image URL to the console
-    //   console.log(this.currentUser); // This will print the current user to the console
-    //   console.log(this.post?.comments); // This will print the comments to the console
-    
-    //   this.authService.user$.subscribe(user => {
-    //     if (user) {
-    //       console.log('User is authenticated');
-    //     } else {
-    //       console.log('User is not authenticated');
-    //     }
-    //   });
-    // }
+  
     ngOnInit(): void {
       this.currentUser = this.authService.getCurrentUser();
       console.log(this.post);
@@ -89,17 +72,9 @@ export class PostComponent implements OnInit{
           console.error('Error fetching posts:', error); // Log any errors
         });
       }
-      // const postId = this.route.snapshot.paramMap.get('id');
-      // if (postId) {
-      //   this.postService.getPostById(postId).subscribe(post => {
-      //     console.log('Fetched post data:', post);
-      //     this.post = post;
-      //   });
-      // }
+
     }
-  // ngOnInit(): void {
-  //   console.log(this.post);
-  // }
+
   delete() {
     this.postService.deletebutton(this.index);
   }
@@ -113,9 +88,7 @@ export class PostComponent implements OnInit{
       // Optionally, display a message to the user
     }
   }
-  // onEdit() {
-  // this.router.navigate(['/post-edit', this.index]);
-  // }
+
   onClick() {
     this.postService.LikePost(this.index);
   }
@@ -142,65 +115,66 @@ export class PostComponent implements OnInit{
 deleteComment(commentIndex: number) {
   this.postService.deleteComment(this.index, commentIndex);
 }
-//   deleteReply(commentIndex: number, replyIndex: number) {
-//     this.postService.deleteReply(this.index, commentIndex, replyIndex);
-// }
-
-//   deleteReply(postId: string, commentIndex: number, replyIndex: number) {
-//     const postRef = this.afs.doc(`posts/${postId}`);
-//     postRef.get().subscribe(doc => {
-//         if (doc.exists) {
-//             let post = doc.data() as Post;
-//             post.comments[commentIndex].replies.splice(replyIndex, 1);
-//             postRef.update(post);
-//         }
-//     });
-// }
 
 
-// addComment(index: number, comment: string, parentCommentIndex?: number) {
-//   if (comment && this.replyingTo !== null) {
-//     const newComment: Comment = { text: comment, commentReplies: [], likes: 0, replies: [] };
-//     this.postService.addComment(index, newComment, parentCommentIndex);
-//     this.comment = ''; 
-//     this.replyingTo = null; 
-//   } else if (comment) {
-//     const newComment: Comment = { text: comment, commentReplies: [], likes: 0, replies: [] };
-//     this.postService.addComment(index, newComment);
-//     this.comment = '';
-//   }
-// }
 
 
 // addComment(index: number, commentText: string, parentCommentIndex?: number) {
 //   const currentUser = this.authService.getCurrentUser();
 //   if (currentUser && commentText) {
 //     const newComment: Comment = { text: commentText, commentReplies: [], likes: 0, replies: [], userId: currentUser.uid };
-//     if (currentUser.photoURL) {
-//       newComment.userImage = currentUser.photoURL;
-//       console.log('User image URL:', currentUser.photoURL); // Add this line
-//     }
 //     this.postService.addComment(index, newComment, parentCommentIndex);
-//     this.comment = ''; // Reset the comment input
-//     this.replyingTo = null; // Reset replyingTo after replying
+//     this.comment = ''; 
+//     this.replyingTo = null;
+
+//     this.newCommentText = ''; // Clear the input field
+//     this.commentingOn = null; // Hide the input field
 //   }
 // }
-
-
 // addComment(index: number, commentText: string, parentCommentIndex?: number) {
 //   const currentUser = this.authService.getCurrentUser();
 //   if (currentUser && commentText) {
-//     const newComment: Comment = {
-//       text: commentText,
-//       commentReplies: [],
-//       likes: 0,
-//       replies: [],
-//       userId: currentUser.uid,
-//       userImageUrl: this.post?.imgPath // Set the user's image URL
-//     };
+//     const newComment: Comment = { text: commentText, commentReplies: [], likes: 0, replies: [], userId: currentUser.uid };
 //     this.postService.addComment(index, newComment, parentCommentIndex);
-//     this.comment = ''; // Reset the comment input
-//     this.replyingTo = null; // Reset replyingTo after replying
+//     this.comment = ''; 
+//     this.replyingTo = null;
+//     this.commentingOn = undefined;
+//     this.newCommentText = ''; // Clear the input field
+//     console.log('Comment added, commentingOn set to null');
+//   } else {
+//     console.log('Comment not added, currentUser or commentText is missing');
+//   }
+// }
+// addComment(index: number, commentText: string, parentCommentIndex?: number) {
+//   const currentUser = this.authService.getCurrentUser();
+
+//   if (currentUser && commentText) {
+//     const newComment: Comment = { text: commentText, commentReplies: [], likes: 0, replies: [], userId: currentUser.uid };
+
+//     if (this.post) {
+//       if (parentCommentIndex !== undefined) {
+//         const parentComment = this.post.comments[parentCommentIndex];
+//         if (parentComment && !parentComment.commentReplies) {
+//           parentComment.commentReplies = [];
+//         }
+//         parentComment.commentReplies.push(newComment);
+//       } else {
+//         this.post.comments.push(newComment);
+//       }
+
+//       this.comment = '';
+//       this.replyingTo = null;
+//       this.commentingOn = undefined;
+//       this.newCommentText = ''; // Clear the input field
+//       console.log('Comment added, commentingOn set to null');
+      
+//       // ... (rest of your code)
+
+//     } else {
+//       console.error('Post not found');
+//     }
+//   } else {
+//     console.log('Comment not added, currentUser or commentText is missing');
 //   }
 // }
 
@@ -234,35 +208,12 @@ setParentCommentIndex(commentIndex: number | undefined) {
   this.replyingTo = commentIndex;
 }
 
-// likeComment(postIndex: number, commentIndex: number): void {
-//   this.postService.likeComment(postIndex, commentIndex);
-// }
+
 likeComment(commentIndex: number): void {
   this.postService.likeComment(this.index, commentIndex);
 }
 
-// likeComment(commentIndex: number): void {
-//   if (this.post && this.post.comments) {
-//     const comment = this.post.comments[commentIndex];
-//     const currentUser = this.authService.getCurrentUser();
-//     if (comment && currentUser) {
-//       comment.likedByUsers = comment.likedByUsers || [];
-//       if (comment.likedByUsers.includes(currentUser.uid)) {
-//         // If the user has already liked the comment, unlike it
-//         const userIndex = comment.likedByUsers.indexOf(currentUser.uid);
-//         comment.likedByUsers.splice(userIndex, 1);
-//         comment.likes--;
-//         console.log("You've unliked this comment.");
-//       } else {
-//         // If the user hasn't liked the comment, like it
-//         comment.likedByUsers.push(currentUser.uid);
-//         comment.likes++;
-//         console.log("You've liked this comment.");
-//       }
-//       this.postService.updatePost(this.index, this.post);
-//     }
-//   }
-// }
+
 
   likeReply(postIndex: number, commentIndex: number, replyIndex: number): void {
     const reply = this.post?.comments[commentIndex]?.commentReplies[replyIndex];
