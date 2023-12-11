@@ -116,9 +116,6 @@ body {
   margin-left: 10px;
 }
 
-.comment-container {
-  margin-top: 15px;
-}
 
 .comment-text {
   margin-bottom: 5px;
@@ -127,19 +124,26 @@ body {
 
 .reply-container {
   margin-top: 10px;
-  margin-left: 20px;
+  margin-left: 0px;
 }
 
 .reply-text {
+  display: flex;
   margin-bottom: 5px;
   color: #555;
+  display: flex;
+  align-items: center;
+  gap: 15px;
 }
 
 .comment-actions button,
 .reply-input button {
   margin-right: 10px;
 }
-
+.reply-input {
+  position: relative;
+  justify-content: left;
+}
 .likes-count {
   margin-right: 5px;
   font-weight: bold;
@@ -158,17 +162,7 @@ body {
   gap: 10px; /* Adjust as needed */
 }
 
-.comment-container {
-  display: flex;
-  align-items: center;
-  justify-content:left;
-  margin-bottom: 10px; /* Adjust as needed */
-}
 
-.comment-content {
-  display: flex;
-  align-items: center;
-}
 
 .comment-text {
   margin-right: 10px; /* Adjust as needed */
@@ -196,4 +190,27 @@ body {
   background-color: transparent;
   border: none;
   color: #007bff; /* Blue text color */
+}
+
+.comment-actions {
+  display: flex;
+  align-items: center;
+}
+
+.comment-container {
+  margin-top: 15px;
+}
+
+.comment-content {
+  display: flex;
+  align-items: center;
+}
+
+.comment-text {
+  margin-right: 10px; /* Adjust as needed */
+}
+
+.reply-input {
+  position: relative;
+  margin-top: 10px;
 }

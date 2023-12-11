@@ -17,6 +17,7 @@ export class PostService{
     private postsCache: Post[] = [];
   posts: any;
   private postsByUser: { [key: string]: Post[] } = {}; // Add this line
+  listofpostsUpdated = new Subject<Post[]>();
     
 
   constructor(private http: HttpClient, 
@@ -70,6 +71,7 @@ deletebutton(index: number): void {
     post.userId = userId;
     post.postId = this.generateId(); // Add this line
     this.listofposts.push(post);
+    this.listofpostsUpdated.next([...this.listofposts]);
     this.saveData(); // Save data after adding a post
   
     // Create a notification for each user

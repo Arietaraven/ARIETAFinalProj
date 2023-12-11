@@ -10,3 +10,13 @@
   .navbar {
     background-color: #007bff; /* Blue */
   }
+  .fixed-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000; /* This will ensure the header stays on top of other elements */
+  }
+  body {
+    padding-top: 70px; /* Adjust based on the height of your header */
+  }

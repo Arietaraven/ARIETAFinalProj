@@ -63,6 +63,14 @@ ngOnInit(): void {
     this.postService.setPost(posts); 
   });
   console.log(this.listofposts);
+
+  // Subscribe to updates in the list of posts
+  this.backEndService.postsChanged.subscribe(() => {
+    this.backEndService.fetchData().subscribe((posts: Post[]) => {
+      this.listofposts = posts;
+      this.postService.setPost(posts); 
+    });
+  });
 }
 // ngOnInit(): void {
 //   const currentUser = this.authService.getCurrentUser();

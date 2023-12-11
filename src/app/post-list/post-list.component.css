@@ -15,3 +15,9 @@
   .input-group .bi-search {
     fill: #ffffff; /* White */
   }
+  .post-list {
+    background-color: #00008b; /* Dark blue color */
+  }
+  .input-group{
+    margin-top: 5rem;
+  }

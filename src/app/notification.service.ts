@@ -32,9 +32,28 @@ export class NotificationService {
   //     console.error("Cannot create notification: No current user");
   //   }
   // }
-  createNotification(postId: string, userId: string, message: string) {
-    console.log('createNotification called with postId:', postId, 'userId:', userId, 'message:', message);
+  // createNotification(postId: string, userId: string, message: string) {
+  //   console.log('createNotification called with postId:', postId, 'userId:', userId, 'message:', message);
     
+  //   let id = this.generateId();
+  //   let uid = this.getUid();
+  //   let read = false;
+  //   let date = new Date();
+  
+  //   if (uid) {
+  //     let notification = new FirebaseNotification(id, postId, userId, uid, message, read, date);
+  //     notification = Object.assign({}, notification); // Convert to plain object
+  //     this.firestore.collection('notifications').add(notification);
+  
+  //     // Add the new notification to the local array
+  //     this.notifications.push(notification);
+  
+  //     console.log('Created notification:', notification); // Add this line
+  //   } else {
+  //     console.error("Cannot create notification: No current user");
+  //   }
+  // }
+  createNotification(postId: string, userId: string, message: string) {
     let id = this.generateId();
     let uid = this.getUid();
     let read = false;
@@ -48,7 +67,10 @@ export class NotificationService {
       // Add the new notification to the local array
       this.notifications.push(notification);
   
-      console.log('Created notification:', notification); // Add this line
+      // Save notifications to LocalStorage
+      localStorage.setItem('notifications', JSON.stringify(this.notifications));
+  
+      console.log('Created notification:', notification); 
     } else {
       console.error("Cannot create notification: No current user");
     }
@@ -68,7 +90,10 @@ export class NotificationService {
   getNotifications(userId: string): Observable<FirebaseNotification[]> {
     return this.firestore.collection<FirebaseNotification>('notifications', ref => ref.where('userId', '==', userId)).valueChanges()
       .pipe(
-        tap((notifications: FirebaseNotification[]) => console.log('Retrieved notifications:', notifications))
+        tap((notifications: FirebaseNotification[]) => {
+          console.log('Retrieved notifications:', notifications);
+          this._notifications.next(notifications); // Add this line
+        })
       );
   }
   // getNotifications(userId: string): Observable<FirebaseNotification[]> {
