@@ -1,0 +1,12 @@
+<div class="chat-window">
+    <div class="messages-container">
+      <div *ngFor="let message of messages" [class.sent-message]="message.userEmail === currentUserEmail" [class.received-message]="message.userEmail !== currentUserEmail">
+        <p>{{ message.userEmail }}: {{ message.message }}</p>
+      </div>
+    </div>
+    
+    <form (submit)="sendMessage()">
+      <input [(ngModel)]="message" name="message" placeholder="Enter your message">
+      <button type="submit">Send</button>
+    </form>
+  </div>

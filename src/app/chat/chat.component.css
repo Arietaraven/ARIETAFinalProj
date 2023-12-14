@@ -1,0 +1,82 @@
+/* Add your global styles here */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  
+  .container {
+    margin-top: 5rem;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 400px;
+    padding: 20px;
+  }
+  .chat-window{
+    margin-top: 10rem;
+  }
+  div {
+    margin-top: 0rem;
+  }
+  
+  p {
+    margin: 0;
+  }
+  
+  form {
+    margin-top: 10rem;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  input {
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  button {
+    padding: 10px;
+    background-color: #3498db;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  button:hover {
+    background-color: #2980b9;
+  }
+  .messages-container {
+    display: flex;
+    flex-direction: column-reverse;
+    overflow-y: auto;
+  }
+  .sent-message {
+    align-self: flex-end;
+    background-color: #dcf8c6;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    padding: 5px;
+  }
+  
+  .received-message {
+    align-self: flex-start;
+    background-color: #ffffff;
+    border-radius: 5px;
+    margin-bottom: 5px;
+    padding: 5px;
+  }
+  
+  .messages-container {
+    display: flex;
+    flex-direction: column-reverse;
+    overflow-y: auto;
+  }

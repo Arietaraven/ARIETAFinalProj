@@ -23,6 +23,9 @@ import { BackEndService } from './back-end.service';
 import { UserService } from './user.service';
 import { NotificationService } from './notification.service';
 import { AuthService } from './auth.service';
+import { ChatComponent } from './chat/chat.component';
+import { UserListComponent } from './user-list/user-list.component';
+import { ChatService } from './chat.service';
 
 
 
@@ -35,7 +38,8 @@ const routes : Routes = [
   {path: 'post/:id', component: PostComponent},
   {path: 'sign-in', component: SignInComponent},
   {path: 'sign-up', component: SignUpComponent},
-  {path: 'notification', component: NotificationComponent}
+  {path: 'notification', component: NotificationComponent},
+  { path: 'chat/:email', component: ChatComponent }
 ]
 
 @NgModule({
@@ -48,7 +52,10 @@ const routes : Routes = [
     AuthComponent,
     SignInComponent,
     SignUpComponent,
-    NotificationComponent
+    NotificationComponent,
+    ChatComponent,
+    UserListComponent
+    
   ],
   imports: [
     FormsModule,
@@ -61,7 +68,7 @@ const routes : Routes = [
     HttpClientModule,
 
   ],
-  providers: [PostService, BackEndService, AuthService, UserService, NotificationService],
+  providers: [PostService, BackEndService, AuthService, UserService, NotificationService,ChatService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

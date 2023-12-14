@@ -56,4 +56,5 @@ export class FirebaseNotification {
       this.read = read;
       this.date = date;
     }
+
   }

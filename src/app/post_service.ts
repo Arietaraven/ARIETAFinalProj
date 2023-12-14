@@ -67,6 +67,22 @@ deletebutton(index: number): void {
   }
 }
 
+  // addPost(userId: string, post: Post) {
+  //   post.userId = userId;
+  //   post.postId = this.generateId(); // Add this line
+  //   this.listofposts.push(post);
+  //   this.listofpostsUpdated.next([...this.listofposts]);
+  //   this.saveData(); // Save data after adding a post
+  
+  //   // Create a notification for each user
+  //   this.authService.getUsers().subscribe((users: FirebaseNotification[]) => {
+  //     users.forEach((user: FirebaseNotification) => {
+  //       if (post.postId) {
+  //         this.notificationService.createNotification(post.postId, user.uid, 'A new post has been created');
+  //       }
+  //     });
+  //   });
+  // }
   addPost(userId: string, post: Post) {
     post.userId = userId;
     post.postId = this.generateId(); // Add this line
@@ -77,7 +93,8 @@ deletebutton(index: number): void {
     // Create a notification for each user
     this.authService.getUsers().subscribe((users: FirebaseNotification[]) => {
       users.forEach((user: FirebaseNotification) => {
-        if (post.postId) {
+        // Check if the user is not the one who created the post
+        if (user.uid !== userId && post.postId) {
           this.notificationService.createNotification(post.postId, user.uid, 'A new post has been created');
         }
       });

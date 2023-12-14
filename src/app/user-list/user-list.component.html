@@ -1,0 +1,5 @@
+<ul>
+    <li *ngFor="let user of users">
+      <a [routerLink]="['/chat', user.email]">{{ user.name }}</a>
+    </li>
+  </ul>

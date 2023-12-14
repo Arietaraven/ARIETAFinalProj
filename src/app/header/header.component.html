@@ -46,6 +46,31 @@
             </a>
           </div>
         </div> -->
+        <div class="dropdown">
+          <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            User List
+          </button>
+          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <a class="dropdown-item" *ngFor="let user of users" [routerLink]="['/chat', user.email]">{{ user.email }}</a>
+          </div>
+        </div>
+        <!-- <a routerLink="/chat">
+          <i class="fas fa-comments"></i>
+        </a> -->
+        <div class="dropdown">
+          <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Chats
+            <span *ngIf="unreadMessageCount > 0" class="notification-badge">{{ unreadMessageCount }}</span>
+          </button>
+          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <div *ngFor="let chat of chats">
+              <a class="dropdown-item" [routerLink]="['/chat', chat.otherUserEmail]">{{ chat.otherUserEmail }}</a>
+              <div *ngFor="let message of chat.messages">
+                <p>{{ message.message }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
         <app-notification class="notification-button" [notifications]="notifications"></app-notification>
 
         <button class="btn btn-outline-success" type="submit"(click)="onLogout()">Logout</button>
