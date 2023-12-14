@@ -95,6 +95,9 @@ export class AuthService {
     const auth = getAuth();
     return auth.currentUser !== null;
   }
+  // getAuthState(): Observable<User | null> {
+  //   return this.firebaseAuth.authState;
+  // }
   // getUsers(): Observable<FirebaseNotification[]> {
   //   // Retrieve the list of users from the database
   //   return this.db.list<FirebaseNotification>('users').valueChanges();

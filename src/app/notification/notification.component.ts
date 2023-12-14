@@ -6,6 +6,7 @@ import { Post } from '../post.model';
 import { FirebaseNotification } from '../post.model'; // Import FirebaseNotification
 import { ChangeDetectorRef } from '@angular/core';
 import { Input } from '@angular/core';
+import { User } from 'firebase/auth';
 
 @Component({
   selector: 'app-notification',
@@ -51,16 +52,60 @@ export class NotificationComponent implements OnInit {
   //     });
   //   }
   // }
+  // ngOnInit() {
+  //   const currentUser = this.authService.getCurrentUser();
+  //   console.log('Current user:', currentUser); // Add this line
+  //   if (currentUser) {
+  //     this.notificationService.getNotifications(currentUser.uid).subscribe((notifications: FirebaseNotification[]) => {
+  //       this.notifications = notifications;
+  //       this.unreadNotificationsCount = this.notifications.filter(n => !n.read).length; // Update the count here
+  //       this.cd.detectChanges();
+  //     });
+  //   }
+  //     // Load notifications from LocalStorage
+  // const storedData = JSON.parse(localStorage.getItem('notifications') || '{}');
+  // console.log('Stored data:', storedData); // Add this line
+  // if (currentUser && storedData.userId === currentUser.uid) {
+  //   this.notifications = storedData.notifications;
+  //   this.unreadNotificationsCount = this.notifications.filter(n => !n.read).length;
+  // }
+  // }
+  // ngOnInit() {
+  //   this.authService.getAuthState().subscribe((user: User | null) => {
+  //     if (user) {
+  //       this.notificationService.getNotifications(user.uid).subscribe((notifications: FirebaseNotification[]) => {
+  //         this.notifications = notifications;
+  //         this.unreadNotificationsCount = this.notifications.filter(n => !n.read).length;
+  //         this.cd.detectChanges();
+  //       });
+  //     }
+  //     // Load notifications from LocalStorage
+  //     const storedData = JSON.parse(localStorage.getItem('notifications') || '{}');
+  //     console.log('Stored data:', storedData); // Add this line
+  //     if (user && storedData.userId === user.uid) {
+  //       this.notifications = storedData.notifications;
+  //       this.unreadNotificationsCount = this.notifications.filter(n => !n.read).length;
+  //     }
+  //   });
+  // }
   ngOnInit() {
     const currentUser = this.authService.getCurrentUser();
     if (currentUser) {
       this.notificationService.getNotifications(currentUser.uid).subscribe((notifications: FirebaseNotification[]) => {
         this.notifications = notifications;
-        this.unreadNotificationsCount = this.notifications.filter(n => !n.read).length; // Update the count here
+        this.unreadNotificationsCount = this.notifications.filter(n => !n.read).length;
         this.cd.detectChanges();
       });
+    } else {
+      // Load notifications from LocalStorage
+      const storedNotifications = localStorage.getItem('notifications');
+      if (storedNotifications) {
+        this.notifications = JSON.parse(storedNotifications);
+        this.unreadNotificationsCount = this.notifications.filter(n => !n.read).length;
+      }
     }
   }
+
   // ngOnInit() {
   //   const currentUser = this.authService.getCurrentUser();
   //   if (currentUser) {

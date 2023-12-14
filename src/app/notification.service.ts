@@ -106,17 +106,58 @@ export class NotificationService {
   //       })
   //     );
   // }
+  // getNotifications(userId: string): Observable<FirebaseNotification[]> {
+  //   return this.firestore.collection<FirebaseNotification>('notifications', ref => ref.where('userId', '==', userId)).snapshotChanges()
+  //     .pipe(
+  //       map(actions => actions.map(a => {
+  //         const data = a.payload.doc.data() as Omit<FirebaseNotification, 'id'>; // Exclude 'id' from FirebaseNotification
+  //         const id = a.payload.doc.id;
+  //         return { id, ...data };
+  //       })),
+  //       tap((notifications: FirebaseNotification[]) => {
+  //         console.log('Retrieved notifications:', notifications);
+  //         this.notifications = notifications;
+  //       })
+  //     );
+  // }
+  // getNotifications(userId: string): Observable<FirebaseNotification[]> {
+  //   return this.firestore.collection<FirebaseNotification>('notifications', ref => ref.where('userId', '==', userId)).snapshotChanges()
+  //     .pipe(
+  //       map(actions => actions.map(a => {
+  //         const data = a.payload.doc.data() as Omit<FirebaseNotification, 'id'>; // Exclude 'id' from FirebaseNotification
+  //         const id = a.payload.doc.id;
+  //         return { id, ...data };
+  //       })),
+  //       tap((notifications: FirebaseNotification[]) => {
+  //         console.log('Retrieved notifications:', notifications);
+  //         this.notifications = notifications;
+  //         localStorage.setItem('notifications', JSON.stringify({ userId, notifications })); // Store notifications in LocalStorage
+  //         console.log('Stored notifications:', localStorage.getItem('notifications')); // Add this line
+  //       })
+  //     );
+  // }
+  // getNotifications(userId: string): Observable<FirebaseNotification[]> {
+  //   return this.firestore.collection<FirebaseNotification>('notifications', ref => ref.where('userId', '==', userId)).snapshotChanges()
+  //     .pipe(
+  //       map(actions => actions.map(a => {
+  //         const data = a.payload.doc.data() as Omit<FirebaseNotification, 'id'>; // Exclude 'id' from FirebaseNotification
+  //         const id = a.payload.doc.id;
+  //         return { id, ...data };
+  //       })),
+  //       tap((notifications: FirebaseNotification[]) => {
+  //         console.log('Retrieved notifications:', notifications);
+  //         this.notifications = notifications;
+  //         localStorage.setItem('notifications', JSON.stringify(notifications)); // Store notifications in LocalStorage
+  //       })
+  //     );
+  // }
   getNotifications(userId: string): Observable<FirebaseNotification[]> {
-    return this.firestore.collection<FirebaseNotification>('notifications', ref => ref.where('userId', '==', userId)).snapshotChanges()
+    return this.firestore.collection<FirebaseNotification>('notifications', ref => ref.where('userId', '==', userId)).valueChanges()
       .pipe(
-        map(actions => actions.map(a => {
-          const data = a.payload.doc.data() as Omit<FirebaseNotification, 'id'>; // Exclude 'id' from FirebaseNotification
-          const id = a.payload.doc.id;
-          return { id, ...data };
-        })),
         tap((notifications: FirebaseNotification[]) => {
           console.log('Retrieved notifications:', notifications);
           this.notifications = notifications;
+          localStorage.setItem('notifications', JSON.stringify(notifications)); // Store notifications in LocalStorage
         })
       );
   }
