@@ -36,7 +36,9 @@
   <div class="dropdown" [class.show]="showNotifications">
     <button class="btn btn-primary dropdown-toggle" type="button" (click)="toggleNotifications()">
       <i class="fas fa-bell"></i>
-      <span *ngIf="notifications.length > 0" class="notification-count">{{ notifications.length }}</span>
+      <!-- <span *ngIf="notifications.length > 0" class="notification-count">{{ notifications.length }}</span> -->
+      <!-- <span *ngIf="unreadNotificationsCount > 0" class="notification-count">{{ unreadNotificationsCount }}</span> -->
+      <span *ngIf="unreadNotificationsCount > 0" class="notification-count">{{ unreadNotificationsCount }}</span>
     </button>
     <div class="dropdown-menu" [class.show]="showNotifications">
       <!-- <a *ngFor="let notification of notifications" class="dropdown-item" [routerLink]="['/post', notification.postId]" (click)="markAsRead(notification)">

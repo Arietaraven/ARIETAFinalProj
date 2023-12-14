@@ -87,12 +87,36 @@ export class NotificationService {
   //       tap((notifications: FirebaseNotification[]) => console.log('Retrieved notifications:', notifications))
   //     );
   // }
+  // getNotifications(userId: string): Observable<FirebaseNotification[]> {
+  //   return this.firestore.collection<FirebaseNotification>('notifications', ref => ref.where('userId', '==', userId)).valueChanges()
+  //     .pipe(
+  //       tap((notifications: FirebaseNotification[]) => {
+  //         console.log('Retrieved notifications:', notifications);
+  //         this._notifications.next(notifications); // Add this line
+  //       })
+  //     );
+  // }
+  // getNotifications(userId: string): Observable<FirebaseNotification[]> {
+  //   return this.firestore.collection<FirebaseNotification>('notifications', ref => ref.where('userId', '==', userId)).valueChanges()
+  //     .pipe(
+  //       tap((notifications: FirebaseNotification[]) => {
+  //         console.log('Retrieved notifications:', notifications);
+  //         this._notifications.next(notifications);
+  //         this.notifications = notifications; // Add this line
+  //       })
+  //     );
+  // }
   getNotifications(userId: string): Observable<FirebaseNotification[]> {
-    return this.firestore.collection<FirebaseNotification>('notifications', ref => ref.where('userId', '==', userId)).valueChanges()
+    return this.firestore.collection<FirebaseNotification>('notifications', ref => ref.where('userId', '==', userId)).snapshotChanges()
       .pipe(
+        map(actions => actions.map(a => {
+          const data = a.payload.doc.data() as Omit<FirebaseNotification, 'id'>; // Exclude 'id' from FirebaseNotification
+          const id = a.payload.doc.id;
+          return { id, ...data };
+        })),
         tap((notifications: FirebaseNotification[]) => {
           console.log('Retrieved notifications:', notifications);
-          this._notifications.next(notifications); // Add this line
+          this.notifications = notifications;
         })
       );
   }
@@ -115,13 +139,35 @@ export class NotificationService {
   //   return of(userNotifications);
   // }
 
+  // markAsRead(notificationId: string) {
+  //   // Find the notification with the given ID
+  //   const notification = this.notifications.find(n => n.id === notificationId);
+  
+  //   // If the notification exists, mark it as read
+  //   if (notification) {
+  //     notification.read = true;
+  //   } else {
+  //     console.error(`Cannot mark notification as read: No notification found with ID ${notificationId}`);
+  //   }
+  // }
+  // markAsRead(notificationId: string) {
+  //   // Find the notification with the given ID
+  //   const notification = this.notifications.find(n => n.id === notificationId);
+  
+  //   // If the notification exists, mark it as read in Firestore
+  //   if (notification) {
+  //     this.firestore.collection('notifications').doc(notificationId).update({ read: true });
+  //   } else {
+  //     console.error(`Cannot mark notification as read: No notification found with ID ${notificationId}`);
+  //   }
+  // }
   markAsRead(notificationId: string) {
     // Find the notification with the given ID
     const notification = this.notifications.find(n => n.id === notificationId);
   
-    // If the notification exists, mark it as read
+    // If the notification exists, mark it as read in Firestore
     if (notification) {
-      notification.read = true;
+      this.firestore.collection('notifications').doc(notificationId).set({ read: true }, { merge: true });
     } else {
       console.error(`Cannot mark notification as read: No notification found with ID ${notificationId}`);
     }
