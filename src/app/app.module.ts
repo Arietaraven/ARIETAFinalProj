@@ -26,12 +26,13 @@ import { AuthService } from './auth.service';
 import { ChatComponent } from './chat/chat.component';
 import { UserListComponent } from './user-list/user-list.component';
 import { ChatService } from './chat.service';
+import { AuthGuard } from './authguard.service';
 
 
 
 const routes : Routes = [
   {path: '', redirectTo: 'post-list', pathMatch: 'full'},
-  {path: 'post-list', component: PostListComponent},
+  {path: 'post-list', component: PostListComponent, canActivate: [AuthGuard]},
   {path: 'post-add' , component: PostEditComponent},
   {path: 'authentication', component: AuthComponent},
   {path: 'post-edit/:index', component: PostEditComponent},

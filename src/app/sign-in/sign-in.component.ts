@@ -41,6 +41,6 @@ signIn() {
     } else {
       console.log('No user logged in');
     }
-  });
+  }); 
 }
 }

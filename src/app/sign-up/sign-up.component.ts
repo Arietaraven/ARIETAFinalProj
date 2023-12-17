@@ -36,5 +36,5 @@ export class SignUpComponent {
       this.router.navigate(['/sign-in']); // replace '/sign-in' with the route to your sign-in page
       console.log(this.username)
     });
-  }
+  } 
 }
